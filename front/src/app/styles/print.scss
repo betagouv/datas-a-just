@@ -1,0 +1,27 @@
+@media print {
+  .no-print,
+  .no-print * {
+    display: none !important;
+  }
+
+  * {
+    -webkit-print-color-adjust: exact; 
+  }
+
+  aj-wrapper {
+    height: auto !important;
+  }
+}
+
+body.on-print {
+  .no-print,
+  .no-print * {
+    display: none !important;
+  }
+}
+
+
+.p-with-child-Helvetica p {
+  font-size: 10px;
+  font-family: 'Helvetica';
+}

@@ -1,0 +1,59 @@
+@import "../../styles/utils.scss";
+
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+
+  &.dark-mode {
+    .title {
+      color: white;
+
+      &.alert {
+        color: white;
+      }
+    
+      &.good {
+        color: white;
+      }
+    }    
+  }
+
+  &.small-text .title {  
+    font-size: 12px;
+  }
+
+  &.text-blue {
+    .title {
+      color: fColor(bgSelectSelected);
+
+      &.alert {
+        color: fColor(bgSelectSelected);
+      }
+    
+      &.good {
+        color: fColor(bgSelectSelected);
+      }
+    }    
+  }
+}
+
+.title {
+  position: absolute;
+  bottom: 0px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  color: fColor(cyellowdark);
+
+  &.alert {
+    color: #ce0500;
+  }
+
+  &.good {
+    color: #2aac5c;
+  }
+}

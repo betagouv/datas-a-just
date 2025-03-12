@@ -1,0 +1,15 @@
+@import "../../styles/utils.scss";
+
+h1 {
+  color: fColor(primary);
+  margin: 32px 0;
+}
+
+:host {
+  position: relative;
+
+  aj-extractor-activity {
+    margin-top: 24px;
+  }
+
+}

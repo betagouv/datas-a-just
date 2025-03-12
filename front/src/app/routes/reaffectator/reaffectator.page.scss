@@ -1,0 +1,663 @@
+@import '../../styles/utils.scss';
+
+.header-list {
+  display: flex;
+  width: 100%;
+  background-color: fColor(darkModeBgHeader);
+  z-index: 1;
+  position: sticky;
+  top: 0;
+
+  .profil {
+    display: flex;
+    width: 369px;
+
+    > .label-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 8px 0 8px 16px;
+      flex: 1;
+
+      .selection-row {
+        display: flex;
+        margin-bottom: 10px;
+      }
+
+      .buttons-row {
+        display: flex;
+
+        > *:first-child {
+          margin-right: 8px;
+        }
+      }
+
+      .check-item {
+        min-width: 24px;
+        height: 24px;
+        margin-right: 4px;
+        text-align: center;
+        line-height: 24px;
+        padding: 0 4px;
+        width: fit-content;
+
+        &.selected {
+          background-color: fColor(bgSelectSelected);
+          color: white;
+        }
+
+        &.selected::before {
+          position: relative;
+          content: '';
+        }
+      }
+
+      p.label {
+        flex: 1;
+        color: fColor(darkModeTitle);
+      }
+
+      p.btn {
+        border: 1px solid fColor(darkModeTitle);
+        color: fColor(darkModeTitle);
+        padding: 4px 12px;
+        cursor: pointer;
+      }
+    }
+
+    > .contentieux-label {
+      width: 125px;
+      padding-right: 8px;
+
+      p {
+        text-align: right;
+        font-size: 12px;
+        color: fColor(grayRow);
+        white-space: nowrap;
+      }
+
+      > div {
+        flex: 1;
+        display: flex;
+        width: 100%;
+
+        &.label {
+          height: 40px;
+          margin-top: 3px;
+          align-items: flex-end;
+          margin-bottom: 2px;
+        }
+
+        &.etp {
+          height: 23px;
+          align-items: center;
+        }
+
+        &.filter {
+          height: 32px;
+          align-items: center;
+        }
+
+        p {
+          text-align: right;
+          width: 100%;
+        }
+      }
+    }
+  }
+
+  .activities {
+    display: flex;
+    flex: 1;
+    margin-top: 3px;
+
+    > .sub-item {
+      flex: 1;
+      margin-right: 3px;
+      cursor: pointer;
+
+      &.selected {
+        background-color: fColor(darkModeBgMenu);
+
+        .etp {
+          background-color: fColor(darkModeBgHeader);
+        }
+
+        .filter i {
+          color: fColor(tooltipBgTitleColor);
+        }
+      }
+
+      > .label {
+        flex: 1;
+        display: flex;
+        align-items: flex-end;
+        height: 40px;
+        margin-bottom: 2px;
+
+        p {
+          text-transform: uppercase;
+          font-size: 12px;
+          font-weight: bold;
+          color: white;
+          text-align: center;
+          width: 100%;
+        }
+      }
+
+      > .etp {
+        height: 23px;
+        border-radius: 4px;
+        background-color: fColor(darkModeBgMenu);
+        margin: 0 4px;
+
+        p {
+          color: fColor(tooltipBgTitleColor);
+          width: 100%;
+          text-align: center;
+        }
+
+        &.show-reel-values {
+          background-color: fColor(cbluemiddle);
+
+          p {
+            color: fColor(bgSelectSelected);
+          }
+        }
+      }
+
+      .filter {
+        height: 32px;
+        align-items: center;
+        display: flex;
+        justify-content: center;
+
+        i {
+          width: 16px;
+          height: 16px;
+          font-size: 16px;
+          color: fColor(headerColor);
+        }
+      }
+    }
+  }
+}
+
+.indicators {
+  display: flex;
+  width: 100%;
+  background-color: fColor(darkModeBgLight);
+  margin-bottom: 1px;
+
+  .profil {
+    display: flex;
+    align-items: stretch;
+    width: 369px;
+
+    > .label-container {
+      flex: 1;
+      padding: 0px 16px;
+
+      > div {
+        display: flex;
+
+        i {
+          width: 32px;
+          height: 32px;
+          margin-right: 8px;
+          border: 1px solid fColor(darkModeTitle);
+          color: fColor(darkModeTitle);
+          text-align: center;
+          line-height: 32px;
+          cursor: pointer;
+        }
+
+        p {
+          color: white;
+          font-size: 20px;
+          font-weight: bold;
+        }
+      }
+
+      button {
+        margin: 8px 18px 8px 0;
+        height: 32px;
+        line-height: 32px;
+        border: solid 1px fColor(tooltipBgTitleColor);
+        font-size: 14px;
+        font-weight: 500;
+        color: fColor(tooltipBgTitleColor);
+        border-radius: 0;
+        background-color: transparent;
+        cursor: pointer;
+      }
+    }
+
+    > .contentieux-label {
+      align-self: stretch;
+      display: flex;
+      width: 125px;
+      height: 100%;
+
+      > .text {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        justify-content: center;
+        margin-right: 8px;
+
+        p {
+          text-align: right;
+          font-size: 12px;
+          color: fColor(grayRow);
+          white-space: nowrap;
+        }
+
+        > div {
+          display: flex;
+          align-items: center;
+
+          &.taux-row {
+            height: 48px;
+          }
+
+          &.dtes-row {
+            height: 24px;
+            margin-top: 2px;
+          }
+
+          &.etp-target-row {
+            height: 23px;
+            margin-top: 4px;
+          }
+
+          &.total-etp-row {
+            margin-top: 7px;
+            margin-bottom: 11px;
+            height: 20px;
+          }
+        }
+      }
+    }
+  }
+
+  .activities {
+    display: flex;
+    flex: 1;
+
+    > .sub-item {
+      flex: 1;
+      align-self: stretch;
+      display: flex;
+      flex-direction: column;
+
+      > div {
+        margin-right: 3px;
+
+        &.taux-row {
+          height: 48px;
+        }
+
+        &.dtes-row {
+          height: 24px;
+          margin-top: 2px;
+        }
+
+        &.etp-target-row {
+          height: 23px;
+          margin-top: 4px;
+
+          > input {
+            text-align: center;
+            border: none;
+            width: 100%;
+          }
+        }
+
+        &.total-etp-row {
+          margin-top: 7px;
+          margin-bottom: 11px;
+          height: 20px;
+
+          > p {
+            text-align: center;
+            font-weight: bold;
+            color: fColor(headerNumberColor);
+          }
+        }
+
+        > div.taux {
+          background-color: fColor(darkModeBgMenu);
+          border-radius: 3.7px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 100%;
+
+          > aj-speedometer {
+            width: 48px;
+          }
+
+          &.show-reel-values {
+            background-color: fColor(cbluemiddle);
+          }
+        }
+
+        > div.dtes {
+          background-color: fColor(darkModeBgMenu);
+          border-radius: 4px;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          p {
+            color: white;
+            font-size: 14px;
+          }
+
+          &.show-reel-values {
+            background-color: fColor(cbluemiddle);
+
+            p {
+              color: fColor(bgSelectSelected);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  &.print {
+    .content-list {
+      overflow: inherit;
+    }
+
+    .header-list {
+      position: inherit;
+    }
+  }
+
+  .content-list {
+    flex: 1;
+    overflow: auto;
+
+    .sub-content-list {
+      display: inline-block;
+      width: 100%;
+      padding: 1px 2px;
+    }
+  }
+}
+
+.item-list {
+  margin-top: 4px;
+  background-color: fColor(darkModeBgMenu);
+  display: flex;
+  border-radius: 4px;
+
+  &:last-child {
+    margin-bottom: 16px;
+  }
+
+  .activities {
+    flex-direction: column;
+    flex: 1;
+    display: flex;
+    padding-right: 16px;
+
+    > .flex-1 {
+      min-height: 16px;
+    }
+  }
+
+  &.is-modify {
+    background-color: fColor(cbluemiddle);
+
+    .profil.item .text .name p {
+      color: fColor(cbluedark);
+    }
+
+    .activities {
+      background-color: fColor(bgProgressBar);
+    }
+
+    .profil.item .read-etp {
+      background-color: fColor(bgReadETPDark);
+    }
+
+    .profil.item .text .updated-at {
+      color: fColor(cblack);
+    }
+  }
+
+  &.is-selected {
+    .profil.item {
+      background-color: fColor(cbluemiddle);
+    }
+
+    .profil.item .text .name p {
+      color: fColor(cbluedark);
+    }
+
+    .profil.item .text .updated-at {
+      color: fColor(cblack);
+    }
+  }
+}
+
+.profil {
+  width: 369px;
+
+  &.item {
+    display: flex;
+
+    .text {
+      flex: 1;
+      padding: 16px 16px 10px 16px;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+
+      .name {
+        margin-bottom: 8px;
+        display: flex;
+
+        .check-item {
+          margin-top: 3px;
+        }
+
+        p {
+          font-weight: bold;
+          color: white;
+          flex: 1;
+          padding-left: 12px;
+        }
+
+        .tooltip {
+          margin-left: 8px;
+          position: relative;
+
+          &:hover .tooltiptext {
+            visibility: visible;
+          }
+
+          mat-icon {
+            color: fColor(borderProgressBar);
+          }
+
+          .tooltiptext {
+            visibility: hidden;
+            background-color: fColor(borderProgressBar);
+            color: #fff;
+            text-align: center;
+            padding: 8px;
+            font-size: 14px;
+            border-radius: 6px;
+            position: absolute;
+            z-index: 1;
+            top: -5px;
+            left: 105%;
+            max-width: 300px;
+          }
+        }
+      }
+
+      .tags {
+        margin-bottom: 8px;
+
+        > p {
+          display: inline-block;
+          height: 24px;
+          padding: 2px 8px;
+          border-radius: 40px;
+          font-size: 12px;
+          margin-right: 8px;
+          margin-bottom: 4px;
+
+          &.function {
+            color: white;
+            background-color: fColor(cbluelight);
+          }
+
+          &.etp {
+            color: white;
+            background-color: fColor(darkModeBgMenu);
+          }
+
+          mat-icon {
+            font-size: 14px;
+            width: 14px;
+            height: 14px;
+            position: relative;
+            top: 3px;
+          }
+        }
+      }
+
+      .updated-at {
+        margin-top: 10px;
+        font-size: 12px;
+        line-height: 20px;
+        color: white;
+      }
+    }
+
+    .read-etp {
+      padding: 0 14px;
+      width: 125px !important;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-color: fColor(darkModeBgHeader);
+
+      .label {
+        font-size: 12px;
+        font-weight: bold;
+        color: fColor(cgreen);
+        margin: 12px 0 12px 0;
+      }
+    }
+  }
+}
+
+.work-time {
+  width: 80px;
+  margin-right: 16px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.actions {
+  width: 16px;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  background-color: fColor(darkModeBgHeader);
+  padding: 0 16px 16px 16px;
+
+  aj-select,
+  aj-date-select {
+    margin-right: 8px;
+  }
+}
+
+.tag-etp {
+  border-radius: 10px;
+  font-size: 12px;
+  color: white;
+  background-color: #2e7d32;
+  padding: 4px 8px;
+  display: inline-block;
+}
+
+.search-next {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  mat-icon {
+    color: white;
+  }
+}
+
+aj-input-button {
+  margin-left: 16px;
+}
+
+progression-bar {
+  cursor: pointer;
+}
+
+.check-item {
+  width: 16px;
+  height: 16px;
+  border: 1px solid fColor(darkModeTitle);
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+
+  &.selected::before {
+    position: absolute;
+    content: '✓';
+    color: white;
+    text-align: center;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    font-size: 10px;
+    background-color: fColor(bgSelectSelected);
+    border-radius: 3px;
+  }
+}
+
+.category-select {
+  width: 235px;
+}
+
+.unavailable {
+  font-size: 14px;
+  color: fColor(titleIndisponibilitiesPanel);
+  margin-bottom: 10px;
+
+  mat-icon {
+    font-size: 17px;
+    color: fColor(titleIndisponibilitiesPanel);
+    height: 17px;
+    width: 17px;
+    position: relative;
+    top: 3px;
+  }
+}

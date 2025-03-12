@@ -1,0 +1,138 @@
+@import "remixicon/fonts/remixicon.css";
+@import "./utils.scss";
+@import "./typography.scss";
+@import "./form.scss";
+@import "./material.scss";
+@import "./button.scss";
+@import "./popup.scss";
+@import "./print.scss";
+@import "./quill.scss";
+@import "./toastr.scss";
+@import "./design-system-gouv.scss";
+@import "./introjs.scss";
+
+html,
+body {
+	height: 100vh;
+	padding: 0;
+	margin: 0;
+	background-color: white;
+
+	&.remove-height {
+		height: fit-content;
+	}
+}
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+	font-family: Marianne;
+}
+
+.flex-1 {
+	flex: 1;
+}
+
+.flex-2 {
+	flex: 2;
+}
+
+.cursor-pointer {
+	cursor: pointer;
+}
+
+.position-relative {
+	position: relative;
+}
+
+.pointer-events-none {
+	pointer-events: none;
+}
+
+.hide {
+	display: none;
+}
+
+.grid-double {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	grid-gap: 8px;
+}
+
+.grid-triple {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	grid-gap: 8px;
+}
+
+.text-center {
+	text-align: center;
+}
+
+.ellipis {
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.flex-center {
+	display: flex;
+	align-items: center;
+}
+
+.flex-between {
+	justify-content: space-between;
+}
+
+.display-flex {
+	display: flex;
+}
+
+.margin-right-16 {
+	margin-right: 16px;
+}
+
+.margin-right-8 {
+	margin-right: 8px;
+}
+
+.color-white {
+	color: white;
+}
+
+.width-auto {
+	width: auto !important;
+}
+
+.font-size-12 {
+	font-size: 12px;
+}
+
+.error-message {
+	font-size: 16px;
+	color: fColor(cred);
+}
+
+.height-8 {
+	height: 8px;
+}
+
+.height-80 {
+	height: 80px;
+}
+
+// FOR WINDOWS ONLY
+
+body:not(.iIOS) .window-scrool-width-margin {
+	margin-right: 17px;
+}
+
+// global vars
+
+.global-tooltiptext *,
+.global-tooltiptext * * {
+	color: white !important;
+}

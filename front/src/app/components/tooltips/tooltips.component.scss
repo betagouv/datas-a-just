@@ -1,0 +1,197 @@
+@import '../../styles/utils.scss';
+
+:host {
+  &.left .tooltip-text {
+    right: 0;
+    left: inherit;
+
+    >div {
+      position: relative;
+      transform: translateX(0);
+    }
+
+    .triangle {
+      //right: 35px;
+      left: inherit;
+    }
+  }
+
+  &.right .tooltip-text {
+    right: 0;
+    left: inherit;
+
+    >div {
+      position: relative;
+      transform: translateX(0);
+    }
+
+    .triangle {
+      right: 55px;
+      left: inherit;
+    }
+  }
+
+  &.top .tooltip-text {
+    bottom: calc(85% + 4px);
+
+    .triangle {
+      transform: rotate(0.5turn);
+      position: absolute;
+      bottom: -4px;
+    }
+  }
+
+  &.bottom .tooltip-text {
+    top: calc(85% + 4px);
+
+    .triangle {
+      position: absolute;
+      top: -4px;
+    }
+  }
+
+  &.medium .tooltip-text {
+    min-width: 400px;
+  }
+
+  &.large .tooltip-text {
+    width: 700px;
+  }
+
+  &.small .tooltip-text {
+    right: 0;
+    left: inherit;
+
+    >div {
+      position: relative;
+      transform: translateX(0);
+    }
+
+    .content {
+      max-height: none;
+    }
+
+  }
+
+  &.no-bg .tooltip-text {
+    >div {
+      background-color: transparent !important;
+    }
+  }
+
+  &.black {
+    .tooltip-text {
+      mat-icon {
+        color: white;
+      }
+
+      .triangle {
+        border-color: transparent transparent fColor(cblack) transparent;
+      }
+
+      .title {
+        color: white;
+        background-color: fColor(cblack);
+
+        >p {
+          color: fColor(tooltipContentTitleColor);
+        }
+      }
+
+      .footer {
+        color: white;
+        background-color: fColor(cblack);
+
+        &:before {
+          background-color: fColor(cblack);
+        }
+      }
+    }
+  }
+
+  .tooltip-text {
+    // display: flex;
+    // flex-direction: column;
+    position: absolute;
+    z-index: 1;
+    visibility: hidden;
+    left: 70%;
+    cursor: auto;
+
+    >div {
+      position: relative;
+      transform: translateX(-50%);
+      border-radius: 8px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      background-color: fColor(tooltipBgColor);
+      max-width: 800px;
+      min-width: 200px;
+    }
+
+    .triangle {
+      position: absolute;
+      width: 0;
+      height: 0;
+      border-width: 0 3px 4px 3px;
+      border-color: transparent transparent fColor(tooltipBgTitleColor) transparent;
+      border-style: solid;
+      top: -4px;
+      left: calc(50% - 2px);
+    }
+
+    mat-icon {
+      color: fColor(tooltipContentTitleColor);
+      position: absolute;
+      top: 18px;
+      right: 10px;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .title {
+      color: fColor(tooltipContentTitleColor);
+      background-color: fColor(tooltipBgTitleColor);
+      padding: 16px 32px 16px 16px;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+
+      >p {
+        color: fColor(tooltipContentTitleColor);
+      }
+
+      >div {
+        display: flex;
+        align-items: center;
+      }
+    }
+
+    .radius {
+      border-radius: 8px;
+    }
+
+    .content {
+      padding: 16px;
+      color: fColor(tooltipContentColor);
+      max-height: 130px;
+      margin-bottom: 4px;
+    }
+
+    .footer {
+      margin: 0 16px;
+      padding: 9px 16px;
+      position: relative;
+      color: fColor(tooltipContentFooterColor);
+      background-color: fColor(tooltipBgFooterColor);
+
+      &:before {
+        content: ' ';
+        position: absolute;
+        left: 1px;
+        top: 1px;
+        bottom: 1px;
+        width: 4px;
+        background-color: fColor(tooltipContentFooterColor);
+      }
+    }
+  }
+}

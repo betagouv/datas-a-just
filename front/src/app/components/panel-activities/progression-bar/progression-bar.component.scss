@@ -1,0 +1,80 @@
+@import "../../../styles/utils.scss";
+
+:host {
+  display: block;
+  position: relative;
+  height: 62px;
+  width: 41px;
+  z-index: 0;
+
+  &.dark-mode>div.white-background {
+    visibility: visible;
+  }
+
+  &.no-opacity-to-background {
+    >div.background-bar {
+      opacity: 1;
+    }
+  }
+
+  .ddg {
+    opacity: 1 !important;
+    z-index: 1;
+    transform: rotate(-45deg);
+    position: absolute;
+    left: -16px;
+    top: 4px;
+    font-weight: bold;
+    font-size: 7px;
+    line-height: 12px;
+    width: 50px;
+    text-align: center;
+    color: white;
+  }
+
+  >div.white-background {
+    overflow: hidden;
+    background-color: white;
+    position: absolute;
+    height: 100%;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 4px;
+    visibility: hidden;
+  }
+
+  >div {
+    position: absolute;
+    height: 100%;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 4px;
+    border-width: 2px;
+
+    &.seleted {
+      cursor: pointer;
+    }
+
+    &.background-bar {
+      //opacity: 0.2;
+    }
+
+    &.progress-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      p {
+        color: white;
+
+        &.top {
+          position: relative;
+          color: black;
+          top: -20px;
+        }
+      }
+    }
+  }
+}

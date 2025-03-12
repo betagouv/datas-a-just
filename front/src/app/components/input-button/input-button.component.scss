@@ -1,0 +1,118 @@
+@import "../../styles/utils.scss";
+
+:host {
+  display: block;
+  border-radius: 4px;
+  background-color: fColor(bgSelect);
+  border: 1px solid fColor(borderSelect);
+  height: 55px;
+  cursor: pointer;
+  display: flex;
+  align-items: stretch;
+
+  &.full-width {
+    .input {
+      width: 100%;
+    }
+
+    .input-container {
+      width: 100%;
+    }
+
+    input {
+      flex: 1;
+    }
+  }
+
+  &.dark-mode {
+    background-color: fColor(darkModeBgMenu);
+    border: 1px solid fColor(darkModeBgMenu);
+
+    &.search-bar {
+      .input {
+        .input-container {
+          input {
+            &::placeholder {
+              color: white;
+              opacity: 1;
+            }
+          }
+
+          img {
+            filter: brightness(0) invert(1);
+          }
+        }
+      }
+    }
+
+    p,
+    mat-icon,
+    input {
+      color: white;
+    }
+
+    p.title {
+      color: fColor(headerColor);
+    }
+  }
+
+  div {
+    &.input {
+      padding: 2px 8px;
+      //min-width: 189px;
+      display: flex;
+      align-items: center;
+
+      p {
+        white-space: nowrap;
+        height: 24px;
+        font-size: 12px;
+      }
+
+      input {
+        height: 24px;
+        background: none;
+        border: none;
+        font-size: 16px;
+        //width: 100%;
+
+        &::placeholder {
+          color: #929292;
+        }
+
+        &:focus {
+          outline: none;
+        }
+
+        &.restrict-width {
+          width: 100px;
+          font-size: 14px;
+        }
+      }
+
+      .input-container {
+        display: flex;
+
+        img {
+          width: 22px;
+          margin: 0px 4px 0px 0px;
+        }
+      }
+    }
+
+    &.button {
+      width: 57px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: white;
+      border-top-right-radius: 8px;
+      border-bottom-right-radius: 8px;
+      border: 1px solid fColor(cbluedark);
+
+      mat-icon {
+        color: fColor(cbluedark);
+      }
+    }
+  }
+}
