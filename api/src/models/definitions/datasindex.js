@@ -1,10 +1,8 @@
 import Sequelize from "sequelize";
 
-const tableName = "users";
-
 export default (sequelizeInstance) => {
   const Model = sequelizeInstance.define(
-    tableName,
+    "datasindex",
     {
       id: {
         type: Sequelize.INTEGER,
@@ -13,34 +11,11 @@ export default (sequelizeInstance) => {
         autoIncrement: true,
         unique: true,
       },
-      email: {
-        type: Sequelize.STRING(255),
-        allowNull: false,
-        unique: false,
-      },
-      password: {
+      type: {
         type: Sequelize.STRING(255),
         allowNull: true,
       },
-      new_password_token: {
-        type: Sequelize.STRING(255),
-        allowNull: true,
-        unique: true,
-      },
-      role: {
-        type: Sequelize.INTEGER, // 1 - ADMIN / 2 - USER
-        allowNull: true,
-      },
-      status: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        defaultValue: 0,
-      },
-      first_name: {
-        type: Sequelize.STRING(255),
-        allowNull: true,
-      },
-      last_name: {
+      label: {
         type: Sequelize.STRING(255),
         allowNull: true,
       },
@@ -62,7 +37,6 @@ export default (sequelizeInstance) => {
       timestamps: true,
       paranoid: true,
       underscored: true,
-      tableName,
     }
   );
 
