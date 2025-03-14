@@ -5,14 +5,9 @@ import koaBody from "koa-body";
 import config from "config";
 import auth from "./routes-api/middlewares/authentification";
 import sslMiddleware from "./routes-api/middlewares/ssl";
-import honeyTrap from "./routes-api/middlewares/honeyTrap";
-import givePassword from "./routes-logs/middlewares/givePassword";
 import db from "./models";
-import helmet from "koa-helmet";
-import { CSP_URL_IGNORE_RULES } from "./constants/csp";
 import session from "koa-session";
 import { RateLimit } from "koa2-ratelimit";
-import { styleSha1Generate } from "./utils/csp";
 import * as Sentry from "@sentry/node";
 
 export default class App extends AppBase {
@@ -48,10 +43,6 @@ export default class App extends AppBase {
       max: config.maxQueryLimit, // limit each IP to 100 requests per interval
     });
 
-    this.koaApp.use(async (ctx, next) => {
-      return await honeyTrap(ctx, next, this.models);
-    });
-
     this.koaApp.use(session(config.session, this.koaApp));
     Sentry.setupKoaErrorHandler(this.koaApp);
 
@@ -76,8 +67,7 @@ export default class App extends AppBase {
       logger(),
       addDefaultBody(), // if no body is present, put an empty object "{}" in its place.
       compress({}), // compresses requests made to the API
-      givePassword,
-      helmet({
+      /*helmet({
         // https://github.com/helmetjs/helmet
         contentSecurityPolicy: {
           directives: {
@@ -221,7 +211,7 @@ export default class App extends AppBase {
         }
 
         await next();
-      },
+      },*/
     ]);
 
     if (config.corsUrl) {
@@ -234,9 +224,8 @@ export default class App extends AppBase {
       ]);
     }
 
-    super.mountFolder(join(__dirname, "routes-logs"), "/logs/"); // adds a folder to scan for route files
     super.mountFolder(join(__dirname, "routes-api"), "/api/"); // adds a folder to scan for route files
-    super.mountFolder(join(__dirname, "routes-admin"), "/ap-bo/"); // adds a folder to scan for route files
+    //super.mountFolder(join(__dirname, "routes-admin"), "/ap-bo/"); // adds a folder to scan for route files
     super.mountFolder(join(__dirname, "routes"), "/"); // adds a folder to scan for route files
 
     return super.start();

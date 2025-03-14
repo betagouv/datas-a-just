@@ -19,6 +19,10 @@ export default (sequelizeInstance) => {
         type: Sequelize.STRING(255),
         allowNull: true,
       },
+      column_name: {
+        type: Sequelize.STRING(255),
+        allowNull: true,
+      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,
@@ -34,6 +38,7 @@ export default (sequelizeInstance) => {
       },
     },
     {
+      freezeTableName: true,
       timestamps: true,
       paranoid: true,
       underscored: true,

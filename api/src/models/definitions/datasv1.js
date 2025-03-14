@@ -87,8 +87,129 @@ export default (sequelizeInstance) => {
         type: Sequelize.STRING(255),
         allowNull: true,
       },
+      data_20: {
+        type: Sequelize.STRING(255),
+        allowNull: true,
+      },
+      data_21: {
+        type: Sequelize.STRING(255),
+        allowNull: true,
+      },
+      data_22: {
+        type: Sequelize.STRING(255),
+        allowNull: true,
+      },
+      data_23: {
+        type: Sequelize.STRING(255),
+        allowNull: true,
+      },
+      data_24: {
+        type: Sequelize.STRING(255),
+        allowNull: true,
+      },
+      data_25: {
+        type: Sequelize.STRING(255),
+        allowNull: true,
+      },
+      data_26: {
+        type: Sequelize.STRING(255),
+        allowNull: true,
+      },
+      data_27: {
+        type: Sequelize.STRING(255),
+        allowNull: true,
+      },
+      data_28: {
+        type: Sequelize.STRING(255),
+        allowNull: true,
+      },
+      data_29: {
+        type: Sequelize.STRING(255),
+        allowNull: true,
+      },
+      data_30: {
+        type: Sequelize.STRING(255),
+        allowNull: true,
+      },
+      data_31: {
+        type: Sequelize.STRING(255),
+        allowNull: true,
+      },
+      data_32: {
+        type: Sequelize.STRING(255),
+        allowNull: true,
+      },
+      data_33: {
+        type: Sequelize.STRING(255),
+        allowNull: true,
+      },
+      data_34: {
+        type: Sequelize.STRING(255),
+        allowNull: true,
+      },
+      data_35: {
+        type: Sequelize.STRING(255),
+        allowNull: true,
+      },
+      data_36: {
+        type: Sequelize.STRING(255),
+        allowNull: true,
+      },
+      data_37: {
+        type: Sequelize.STRING(255),
+        allowNull: true,
+      },
+      data_38: {
+        type: Sequelize.STRING(255),
+        allowNull: true,
+      },
+      data_39: {
+        type: Sequelize.STRING(255),
+        allowNull: true,
+      },
+      data_40: {
+        type: Sequelize.STRING(255),
+        allowNull: true,
+      },
+      data_41: {
+        type: Sequelize.STRING(255),
+        allowNull: true,
+      },
+      data_42: {
+        type: Sequelize.STRING(255),
+        allowNull: true,
+      },
+      data_43: {
+        type: Sequelize.STRING(255),
+        allowNull: true,
+      },
+      data_44: {
+        type: Sequelize.STRING(255),
+        allowNull: true,
+      },
+      data_45: {
+        type: Sequelize.STRING(255),
+        allowNull: true,
+      },
+      data_46: {
+        type: Sequelize.STRING(255),
+        allowNull: true,
+      },
+      data_47: {
+        type: Sequelize.STRING(255),
+        allowNull: true,
+      },
+      data_48: {
+        type: Sequelize.STRING(255),
+        allowNull: true,
+      },
+      data_49: {
+        type: Sequelize.STRING(255),
+        allowNull: true,
+      },
     },
     {
+      freezeTableName: true,
       timestamps: false,
       paranoid: false,
       underscored: true,

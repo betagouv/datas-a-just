@@ -1,12 +1,4 @@
 import { Route as RouteBase } from "koa-smart";
-import {
-  USER_ACCESS_ACTIVITIES,
-  USER_ACCESS_AVERAGE_TIME,
-  USER_ACCESS_CALCULATOR,
-  USER_ACCESS_SIMULATOR,
-  USER_ACCESS_VENTILATIONS,
-  USER_ACCESS_WHITE_SIMULATOR,
-} from "../constants/access";
 import { USER_ROLE_ADMIN, USER_ROLE_SUPER_ADMIN } from "../constants/roles";
 import { snakeToCamelObject } from "../utils/utils";
 import Sentry from "../utils/sentry";
@@ -127,7 +119,6 @@ export default class Route extends RouteBase {
     user = {
       ...user,
       ...snakeToCamelObject(user),
-      access: await this.models.UsersAccess.getUserAccess(id),
     };
     ctx.body.user = user;
     ctx.state.user = user; // force to add to state with regenerated access
@@ -184,90 +175,10 @@ function isSuperAdmin(ctx) {
     [USER_ROLE_SUPER_ADMIN].indexOf(ctx.body.user.role) !== -1
   );
 }
-
-/**
- * Control si l'utilisateur des accès du Calculateur
- * @param {*} ctx
- * @returns
- */
-function canVewCalculator(ctx) {
-  return (
-    !!ctx.body.user &&
-    ctx.body.user.access &&
-    ctx.body.user.access.indexOf(USER_ACCESS_CALCULATOR) !== -1
-  );
-}
-
-/**
- * Control si l'utilisateur des accès de Ventilation
- * @param {*} ctx
- * @returns
- */
-function canVewHR(ctx) {
-  return (
-    !!ctx.body.user &&
-    ctx.body.user.access &&
-    ctx.body.user.access.indexOf(USER_ACCESS_VENTILATIONS) !== -1
-  );
-}
-
-/**
- * Control si l'utiliusateur des accès d'Activitiés
- * @param {*} ctx
- * @returns
- */
-function canVewActivities(ctx) {
-  return (
-    !!ctx.body.user &&
-    ctx.body.user.access &&
-    ctx.body.user.access.indexOf(USER_ACCESS_ACTIVITIES) !== -1
-  );
-}
-
-/**
- * Control si l'utiliusateur des accès de temps moyen
- * @param {*} ctx
- * @returns
- */
-function canVewContentieuxOptions(ctx) {
-  return (
-    !!ctx.body.user &&
-    ctx.body.user.access &&
-    ctx.body.user.access.indexOf(USER_ACCESS_AVERAGE_TIME) !== -1
-  );
-}
-
-/**
- * Control si l'utiliusateur des simulations
- * @param {*} ctx
- * @returns
- */
-function canVewSimulation(ctx) {
-  return (
-    !!ctx.body.user &&
-    ctx.body.user.access &&
-    ctx.body.user.access.indexOf(USER_ACCESS_SIMULATOR) !== -1
-  );
-}
-
-/**
- * Control si l'utiliusateur des simulations
- * @param {*} ctx
- * @returns
- */
-function canVewWhiteSimulation (ctx) {
-  return !!ctx.body.user && ctx.body.user.access && ctx.body.user.access.indexOf(USER_ACCESS_WHITE_SIMULATOR) !== -1
-}
 /**
  * Model d'export
  */
 export const Access = {
   isLogin,
   isAdmin,
-  canVewHR,
-  canVewCalculator,
-  canVewActivities,
-  canVewSimulation,
-  canVewContentieuxOptions,
-  canVewWhiteSimulation,
-}
+};

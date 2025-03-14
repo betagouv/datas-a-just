@@ -1,48 +1,37 @@
-import Route, { Access } from './Route'
-import { Types } from '../utils/types'
-import { accessList } from '../constants/access'
-import { validateEmail } from '../utils/utils'
-import { crypt } from '../utils'
-import { sentEmail } from '../utils/email'
-import {
-  TEMPLATE_FORGOT_PASSWORD_ID,
-  TEMPLATE_FORGOT_PASSWORD_ID_CA,
-  TEMPLATE_NEW_USER_SIGNIN,
-  TEMPLATE_NEW_USER_SIGNIN_CA,
-  TEMPLATE_USER_ONBOARDING,
-} from '../constants/email'
-import config from 'config'
-import { ADMIN_CHANGE_USER_ACCESS, USER_USER_FORGOT_PASSWORD, USER_USER_PASSWORD_CHANGED, USER_USER_SIGN_IN } from '../constants/log-codes'
-import { getCategoriesByUserAccess } from '../utils/hr-catagories'
-import { USER_ROLE_ADMIN, USER_ROLE_SUPER_ADMIN } from '../constants/roles'
+import Route, { Access } from "./Route";
+import { Types } from "../utils/types";
+import { validateEmail } from "../utils/utils";
+import { crypt } from "../utils";
+import config from "config";
+import { USER_ROLE_ADMIN, USER_ROLE_SUPER_ADMIN } from "../constants/roles";
 
 /**
  * Route de la gestion des utilisateurs
  */
 export default class RouteUsers extends Route {
   // model de BDD
-  model
+  model;
 
   /**
    * Constructeur
    * @param {*} params
    */
-  constructor (params) {
-    super(params)
+  constructor(params) {
+    super(params);
 
-    this.model = params.models.Users
+    this.model = params.models.Users;
   }
 
   /**
    * Interface qui retourne l'utilisateur connecté
    */
   @Route.Get()
-  async me (ctx) {
+  async me(ctx) {
     if (ctx.state && ctx.state.user) {
-      const user = await this.model.userPreview(ctx.state.user.id)
-      this.sendOk(ctx, user)
+      const user = await this.model.userPreview(ctx.state.user.id);
+      this.sendOk(ctx, user);
     } else {
-      this.sendOk(ctx, null)
+      this.sendOk(ctx, null);
     }
   }
 
@@ -50,8 +39,8 @@ export default class RouteUsers extends Route {
    * Interface qui retourne le process.env
    */
   @Route.Get()
-  async interfaceType (ctx) {
-    this.sendOk(ctx, Number(process.env.TYPE_ID))
+  async interfaceType(ctx) {
+    this.sendOk(ctx, Number(process.env.TYPE_ID));
   }
 
   /**
@@ -73,64 +62,49 @@ export default class RouteUsers extends Route {
       fonction: Types.string(),
     }),
   })
-  async createAccount (ctx) {
-    const { firstName, lastName, tj, fonction } = this.body(ctx)
-    let { email } = this.body(ctx)
+  async createAccount(ctx) {
+    const { firstName, lastName, tj, fonction } = this.body(ctx);
+    let { email } = this.body(ctx);
 
-    email = (email || '').toLowerCase() // force to lower case email
+    email = (email || "").toLowerCase(); // force to lower case email
 
     try {
-      const user = await this.model.createAccount({ ...this.body(ctx), email })
-      await sentEmail(
-        {
-          email: config.supportEmail,
-        },
-        Number(config.juridictionType) === 1 ? TEMPLATE_NEW_USER_SIGNIN_CA : TEMPLATE_NEW_USER_SIGNIN,
-        {
-          email,
-          serverUrl: config.frontUrl,
-          tj,
-          fonction,
-        }
-      )
-      await sentEmail(
-        {
-          email,
-        },
-        TEMPLATE_USER_ONBOARDING,
-        {
-          serverUrl: config.frontUrl,
-        }
-      )
+      const user = await this.model.createAccount({ ...this.body(ctx), email });
       await this.models.Logs.addLog(USER_USER_SIGN_IN, null, {
         email,
         firstName,
         lastName,
         tj,
         fonction,
-      })
+      });
 
       // check email integrity for justice email
-      if (email.indexOf('justice.fr') !== -1 || email.indexOf('.gouv.fr') !== -1) {
+      if (
+        email.indexOf("justice.fr") !== -1 ||
+        email.indexOf(".gouv.fr") !== -1
+      ) {
         // check firstname and lastname
-        if (email.indexOf((firstName || '').toLowerCase()) === -1 || email.indexOf((lastName || '').toLowerCase()) === -1) {
+        if (
+          email.indexOf((firstName || "").toLowerCase()) === -1 ||
+          email.indexOf((lastName || "").toLowerCase()) === -1
+        ) {
           await this.models.Notifications.toSupport(
             "Control du mail d'un agent",
             `Il est recommandé de contrôler le mail de l'agent <b>${email}</b> afin d'être sûr qu'il soit valide !<br/><br/>Les informations nominatives de l’utilisateur saisies par l’utilisateur ne correspondent pas exactement au courriel renseigné.`
-          )
+          );
         }
       }
 
       if (user) {
-        delete user.dataValues.password
-        await ctx.loginUser(user.dataValues, 7)
-        await super.addUserInfoInBody(ctx)
-        this.sendCreated(ctx)
+        delete user.dataValues.password;
+        await ctx.loginUser(user.dataValues, 7);
+        await super.addUserInfoInBody(ctx);
+        this.sendCreated(ctx);
       } else {
-        this.sendOk(ctx, null)
+        this.sendOk(ctx, null);
       }
     } catch (err) {
-      ctx.throw(401, err)
+      ctx.throw(401, err);
     }
   }
 
@@ -138,59 +112,71 @@ export default class RouteUsers extends Route {
    * Interface pour supprimer un compte (For test only)
    */
   @Route.Delete({
-    path: 'remove-account-test/:id',
+    path: "remove-account-test/:id",
     accesses: [Access.isAdmin],
   })
-  async removeAccountTest (ctx) {
-    const { id } = ctx.params
+  async removeAccountTest(ctx) {
+    const { id } = ctx.params;
 
     const user = this.model.findOne({
       where: { id: id },
-    })
+    });
 
     if (user) {
       if (
         ctx.state.user.id === user.id ||
         user.role === USER_ROLE_SUPER_ADMIN ||
-        (ctx.state.user.role !== USER_ROLE_ADMIN && ctx.state.user.role !== USER_ROLE_SUPER_ADMIN)
+        (ctx.state.user.role !== USER_ROLE_ADMIN &&
+          ctx.state.user.role !== USER_ROLE_SUPER_ADMIN)
       )
-        ctx.throw(401, ctx.state.__("Vous n'avez pas les droits ou vous ne pouvez pas supprimer un super administrateur ou vous même"))
+        ctx.throw(
+          401,
+          ctx.state.__(
+            "Vous n'avez pas les droits ou vous ne pouvez pas supprimer un super administrateur ou vous même"
+          )
+        );
 
       if (await this.model.removeAccount(id, { force: true })) {
-        this.sendOk(ctx, 'Ok')
+        this.sendOk(ctx, "Ok");
       } else {
-        ctx.throw(401, ctx.state.__('Code non valide!'))
+        ctx.throw(401, ctx.state.__("Code non valide!"));
       }
-    } else ctx.throw(401, ctx.state.__('Utilisateur non trouvé'))
+    } else ctx.throw(401, ctx.state.__("Utilisateur non trouvé"));
   }
 
   /**
    * Interface pour supprimer un compte (Admin only)
    */
   @Route.Delete({
-    path: 'remove-account/:id',
+    path: "remove-account/:id",
     accesses: [Access.isAdmin],
   })
-  async removeAccount (ctx) {
-    const { id } = ctx.params
+  async removeAccount(ctx) {
+    const { id } = ctx.params;
     const user = this.model.findOne({
       where: { id: id },
-    })
+    });
 
     if (user) {
       if (
         ctx.state.user.id === user.id ||
         user.role === USER_ROLE_SUPER_ADMIN ||
-        (ctx.state.user.role !== USER_ROLE_ADMIN && ctx.state.user.role !== USER_ROLE_SUPER_ADMIN)
+        (ctx.state.user.role !== USER_ROLE_ADMIN &&
+          ctx.state.user.role !== USER_ROLE_SUPER_ADMIN)
       )
-        ctx.throw(401, ctx.state.__("Vous n'avez pas les droits ou vous ne pouvez pas suppimer un super administrateur ou vous même"))
+        ctx.throw(
+          401,
+          ctx.state.__(
+            "Vous n'avez pas les droits ou vous ne pouvez pas suppimer un super administrateur ou vous même"
+          )
+        );
 
       if (await this.model.removeAccount(id, {})) {
-        this.sendOk(ctx, 'Ok')
+        this.sendOk(ctx, "Ok");
       } else {
-        ctx.throw(401, ctx.state.__('Code non valide!'))
+        ctx.throw(401, ctx.state.__("Code non valide!"));
       }
-    } else ctx.throw(401, ctx.state.__('Utilisateur non trouvé'))
+    } else ctx.throw(401, ctx.state.__("Utilisateur non trouvé"));
   }
 
   /**
@@ -199,14 +185,14 @@ export default class RouteUsers extends Route {
   @Route.Get({
     accesses: [Access.isAdmin],
   })
-  async getAll (ctx) {
-    const list = await this.model.getAll()
+  async getAll(ctx) {
+    const list = await this.model.getAll();
 
     this.sendOk(ctx, {
       list,
       ventilations: await this.model.models.HRBackups.getAll(),
       access: accessList,
-    })
+    });
   }
 
   /**
@@ -223,18 +209,29 @@ export default class RouteUsers extends Route {
     }),
     accesses: [Access.isAdmin],
   })
-  async updateAccount (ctx) {
-    const { userId } = this.body(ctx)
-    const userToUpdate = await this.model.userPreview(userId)
-    if (userToUpdate && userToUpdate.role === USER_ROLE_SUPER_ADMIN && ctx.state.user.role !== USER_ROLE_SUPER_ADMIN) {
-      ctx.throw(401, "Vous ne pouvez pas modifier les droits d'un super administrateur.")
+  async updateAccount(ctx) {
+    const { userId } = this.body(ctx);
+    const userToUpdate = await this.model.userPreview(userId);
+    if (
+      userToUpdate &&
+      userToUpdate.role === USER_ROLE_SUPER_ADMIN &&
+      ctx.state.user.role !== USER_ROLE_SUPER_ADMIN
+    ) {
+      ctx.throw(
+        401,
+        "Vous ne pouvez pas modifier les droits d'un super administrateur."
+      );
     }
     try {
-      await this.model.updateAccount(this.body(ctx))
-      await this.models.Logs.addLog(ADMIN_CHANGE_USER_ACCESS, ctx.state.user.id, { userId })
-      this.sendOk(ctx, 'OK')
+      await this.model.updateAccount(this.body(ctx));
+      await this.models.Logs.addLog(
+        ADMIN_CHANGE_USER_ACCESS,
+        ctx.state.user.id,
+        { userId }
+      );
+      this.sendOk(ctx, "OK");
     } catch (err) {
-      ctx.throw(401, err)
+      ctx.throw(401, err);
     }
   }
 
@@ -248,40 +245,47 @@ export default class RouteUsers extends Route {
       email: Types.string().required(),
     }),
   })
-  async forgotPassword (ctx) {
-    let { email } = this.body(ctx)
-    email = (email || '').trim().toLowerCase()
+  async forgotPassword(ctx) {
+    let { email } = this.body(ctx);
+    email = (email || "").trim().toLowerCase();
 
     if (validateEmail(email)) {
       // send message by email
-      const user = await this.model.findOne({ where: { email } })
+      const user = await this.model.findOne({ where: { email } });
       if (user) {
-        const key = crypt.generateRandomNumber(6)
-        await user.update({ new_password_token: key })
+        const key = crypt.generateRandomNumber(6);
+        await user.update({ new_password_token: key });
 
-        console.log('Template ID reset password', Number(config.juridictionType) === 1 ? TEMPLATE_FORGOT_PASSWORD_ID_CA : TEMPLATE_FORGOT_PASSWORD_ID)
+        console.log(
+          "Template ID reset password",
+          Number(config.juridictionType) === 1
+            ? TEMPLATE_FORGOT_PASSWORD_ID_CA
+            : TEMPLATE_FORGOT_PASSWORD_ID
+        );
         await sentEmail(
           {
             email,
           },
-          Number(config.juridictionType) === 1 ? TEMPLATE_FORGOT_PASSWORD_ID_CA : TEMPLATE_FORGOT_PASSWORD_ID,
+          Number(config.juridictionType) === 1
+            ? TEMPLATE_FORGOT_PASSWORD_ID_CA
+            : TEMPLATE_FORGOT_PASSWORD_ID,
           {
             code: key,
             serverUrl: `${config.frontUrl}/nouveau-mot-de-passe?p=${key}`,
           }
-        )
+        );
         await this.models.Logs.addLog(USER_USER_FORGOT_PASSWORD, null, {
           email,
-        })
+        });
         this.sendOk(
           ctx,
           "Votre demande de changement de mot de passe a bien été transmise. Vous aller recevoir, d'ici quelques minutes, un e-mail de réinitialisation à l'adresse correspondant à votre compte d'inscription."
-        )
-        return
+        );
+        return;
       }
     }
 
-    ctx.throw(401, ctx.state.__('Information de contact non valide!'))
+    ctx.throw(401, ctx.state.__("Information de contact non valide!"));
   }
 
   /**
@@ -298,29 +302,34 @@ export default class RouteUsers extends Route {
       password: Types.string().required(),
     }),
   })
-  async changePassword (ctx) {
-    let { email, code, password } = this.body(ctx)
-    email = (email || '').trim().toLowerCase()
+  async changePassword(ctx) {
+    let { email, code, password } = this.body(ctx);
+    email = (email || "").trim().toLowerCase();
 
     const user = await this.model.findOne({
       where: { email, new_password_token: code },
-    })
+    });
     if (user) {
       try {
-        if (await this.model.updatePassword(user.dataValues.id, password, email)) {
-          await this.models.Logs.addLog(USER_USER_PASSWORD_CHANGED, user.dataValues.id)
+        if (
+          await this.model.updatePassword(user.dataValues.id, password, email)
+        ) {
+          await this.models.Logs.addLog(
+            USER_USER_PASSWORD_CHANGED,
+            user.dataValues.id
+          );
           this.sendOk(ctx, {
             status: true,
-            msg: 'Votre mot de passe est maintenant changé. Vous pouvez dès maintenant vous connecter.',
-          })
+            msg: "Votre mot de passe est maintenant changé. Vous pouvez dès maintenant vous connecter.",
+          });
         }
       } catch (err) {
-        ctx.throw(401, err)
+        ctx.throw(401, err);
       }
-      return
+      return;
     }
 
-    ctx.throw(401, ctx.state.__('Information de contact non valide!'))
+    ctx.throw(401, ctx.state.__("Information de contact non valide!"));
   }
 
   /**
@@ -329,15 +338,18 @@ export default class RouteUsers extends Route {
   @Route.Get({
     accesses: [Access.isLogin],
   })
-  async getUserDatas (ctx) {
-    const backups = await this.models.HRBackups.list(ctx.state.user.id)
-    const categories = getCategoriesByUserAccess(await this.models.HRCategories.getAll(), ctx.state.user)
-    const fonctions = await this.models.HRFonctions.getAll()
+  async getUserDatas(ctx) {
+    const backups = await this.models.HRBackups.list(ctx.state.user.id);
+    const categories = getCategoriesByUserAccess(
+      await this.models.HRCategories.getAll(),
+      ctx.state.user
+    );
+    const fonctions = await this.models.HRFonctions.getAll();
 
     this.sendOk(ctx, {
       backups,
       categories,
       fonctions,
-    })
+    });
   }
 }
