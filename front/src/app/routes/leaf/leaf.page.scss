@@ -19,10 +19,32 @@ label {
   font-weight: bold;
 }
 
+.requested-filters {
+  margin-bottom: 32px;
+
+  > div {
+    margin-bottom: 16px;
+  }
+}
+
 .add-filter {
   > div {
     display: flex;
     align-items: center;
     gap: 8px;
+  }
+}
+
+.actions {
+  margin-top: 32px;
+  display: flex;
+  gap: 16px;
+}
+
+.preview {
+  margin-top: 32px;
+
+  table td, table th {
+    border: 1px solid gray;
   }
 }

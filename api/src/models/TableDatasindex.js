@@ -140,9 +140,9 @@ export default (sequelizeInstance, Model) => {
     return list;
   };
 
-  /*setTimeout(() => {
+  setTimeout(() => {
     Model.syncDatas();
-  }, 1000);*/
+  }, 1000);
 
   return Model;
 };

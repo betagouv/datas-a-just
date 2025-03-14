@@ -12,20 +12,48 @@
         </div>
     </div>
 
-    Requette !!!!!
-
-
+    <div class="requested-filters">
+        <label>Filtres :</label>
+        <p *ngIf="(leaf.datasFilters || []).length === 0">Aucuns</p>
+        <div *ngFor="let filter of (leaf.datasFilters || []); let index = index">
+            <div class="filter grid-triple">
+                <span>TYPE : {{filter.label}}</span>
+                <p>FILTRE : <input [(ngModel)]="filter.columnFilter" /> (regex pour <a href="https://regex101.com/"
+                        target="_blank">tester</a>)</p>
+                <button (click)="leaf.datasFilters.splice(index, 1)">Supprimer</button>
+            </div>
+        </div>
+    </div>
 
     <div class="add-filter">
         <label>Ajouter un filtre :</label>
         <div>
-            <select>
+            <select #filterType>
                 <option *ngFor="let type of dataTypes" [value]="type.id">{{type.label}}</option>
             </select>
-            <button>Ajouter</button>
+            <button (click)="onAddFilter()">Ajouter</button>
         </div>
     </div>
 
-    Save Cancel, Prévisualiser (resultat + lignes)
+    <div class="actions">
+        <button (click)="onSave()">Sauvegarder</button>
+        <button (click)="onCancel()">Annuler</button>
+        <button (click)="onPreview()">Prévisualiser (resultat + lignes)</button>
+    </div>
 
+    <div class="preview" *ngIf="lines.length">
+        <h3>Prévisualisation</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th *ngFor="let column of linesHeaders">{{column.label}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let line of lines">
+                    <td *ngFor="let column of linesHeaders">{{line[column.value]}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </ng-template>

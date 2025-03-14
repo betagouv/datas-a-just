@@ -1,5 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { ServerService } from '../http-server/server.service';
+import { LeafInterface } from '../../interfaces/leaf.interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -17,5 +18,13 @@ export class TreeService {
 
   getLeafDetails(id: string) {
     return this.serverService.get(`leafs/get-details/${id}`);
+  }
+
+  saveLeaf(leaf: LeafInterface) {
+    return this.serverService.put(`leafs/save`, leaf);
+  }
+
+  previewLeaf(leaf: LeafInterface) {
+    return this.serverService.put(`leafs/preview`, leaf);
   }
 }
