@@ -59,7 +59,7 @@ export class ServerService {
         if (localStorage && localStorage.getItem('token')) {
           this.setToken(localStorage.getItem('token'));
         }
-      } catch (err) {}
+      } catch (err) { }
     }
 
     return this.userToken.getValue();
@@ -83,7 +83,7 @@ export class ServerService {
       .get(this.getUrl(url), options)
       .then((r) => {
         //this.appService.setIsLoading(false);
-        return r;
+        return r.data || r;
       })
       .catch(this.handleError);
   }
@@ -92,7 +92,7 @@ export class ServerService {
     console.log('HTTP GET ' + this.getUrl(url));
     return this._http.get(this.getUrl(url), options).then((r) => {
       //this.appService.setIsLoading(false);
-      return r;
+      return r.data || r;
     });
   }
 
@@ -102,7 +102,7 @@ export class ServerService {
       .post(this.getUrl(url), params, options)
       .then((r) => {
         //this.appService.setIsLoading(false);
-        return r;
+        return r.data || r;
       })
       .catch(this.handleError);
   }
@@ -111,7 +111,7 @@ export class ServerService {
     console.log('HTTP GET ' + this.getUrl(url));
     return this._http.post(this.getUrl(url), params, options).then((r) => {
       //this.appService.setIsLoading(false);
-      return r;
+      return r.data || r;
     });
   }
 
@@ -121,7 +121,7 @@ export class ServerService {
       .put(this.getUrl(url), params, options)
       .then((r) => {
         //this.appService.setIsLoading(false);
-        return r;
+        return r.data || r;
       })
       .catch(this.handleError);
   }
@@ -132,7 +132,7 @@ export class ServerService {
       .delete(this.getUrl(url), options)
       .then((r) => {
         //this.appService.setIsLoading(false);
-        return r;
+        return r.data || r;
       })
       .catch(this.handleError);
   }

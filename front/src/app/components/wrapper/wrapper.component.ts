@@ -33,7 +33,7 @@ import { UserService } from '../../services/user/user.service';
 import { HumanResourceService } from '../../services/human-resource/human-resource.service';
 import { AppService } from '../../services/app/app.service';
 import { ServerService } from '../../services/http-server/server.service';
-import { ActivitiesService } from '../../services/activities/activities.service';
+import { ActivitiesService } from '../../services/tree/tree.service';
 import { UserInterface } from '../../interfaces/user-interface';
 import { addHTML } from '../../utils/js-pdf';
 import { downloadFile } from '../../utils/system';

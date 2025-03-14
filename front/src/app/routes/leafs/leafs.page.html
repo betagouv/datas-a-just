@@ -1,0 +1,7 @@
+<h2>Les feuilles</h2>
+
+<button (click)="onAddLeaf()">Ajouter une feuille</button>
+
+<div *ngFor="let leaf of leafs" class="leaf-item">
+    #{{leaf.id}} - Feuille : {{ leaf.name }} - <a [routerLink]="'/editer-feuille/'+leaf.id">Editer</a>
+</div>
