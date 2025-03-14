@@ -1,9 +1,31 @@
 <h2>Edition d'une feuille</h2>
 
-Nom
-Alias
+<ng-template [ngIf]="leaf">
+    <div class="grid-double">
+        <div class="input-row">
+            <label>Nom : </label>
+            <input [(ngModel)]="leaf.name" placeholder="Nom de la feuille" />
+        </div>
+        <div class="input-row">
+            <label>Alias : </label>
+            <input [(ngModel)]="leaf.aliasName" placeholder="Alias de la feuille" />
+        </div>
+    </div>
 
-Requette
+    Requette !!!!!
 
 
-Save Cancel
+
+    <div class="add-filter">
+        <label>Ajouter un filtre :</label>
+        <div>
+            <select>
+                <option *ngFor="let type of dataTypes" [value]="type.id">{{type.label}}</option>
+            </select>
+            <button>Ajouter</button>
+        </div>
+    </div>
+
+    Save Cancel, Prévisualiser (resultat + lignes)
+
+</ng-template>

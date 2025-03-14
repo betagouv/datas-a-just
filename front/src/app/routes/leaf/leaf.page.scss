@@ -8,3 +8,21 @@
 h2 {
   margin-bottom: 16px;
 }
+
+.input-row {
+  margin-bottom: 16px;
+}
+  
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.add-filter {
+  > div {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}

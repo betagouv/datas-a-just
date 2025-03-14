@@ -14,4 +14,8 @@ export class TreeService {
   addLeaf() {
     return this.serverService.post(`leafs/add`, { name: 'Nouvelle feuille' });
   }
+
+  getLeafDetails(id: string) {
+    return this.serverService.get(`leafs/get-details/${id}`);
+  }
 }

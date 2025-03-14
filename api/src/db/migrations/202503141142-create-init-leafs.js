@@ -48,11 +48,15 @@ module.exports = {
         defaultValue: true,
         allowNull: false,
       },
-      data_type: {
+      column_name: {
         type: Sequelize.STRING(255),
         allowNull: true,
       },
-      data_value: {
+      column_filter: {
+        type: Sequelize.STRING(255),
+        allowNull: true,
+      },
+      type: {
         type: Sequelize.STRING(255),
         allowNull: true,
       },

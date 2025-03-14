@@ -132,9 +132,17 @@ export default (sequelizeInstance, Model) => {
     dbInstance.options.logging = true;
   };
 
-  setTimeout(() => {
+  Model.list = async () => {
+    const list = await Model.findAll({
+      attributes: ["id", "label", "type", ["column_name", "columnName"]],
+    });
+
+    return list;
+  };
+
+  /*setTimeout(() => {
     Model.syncDatas();
-  }, 1000);
+  }, 1000);*/
 
   return Model;
 };

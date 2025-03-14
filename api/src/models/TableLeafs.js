@@ -11,5 +11,13 @@ export default (sequelizeInstance, Model) => {
     return await Model.create({ name });
   };
 
+  Model.getDetails = async (id) => {
+    const details = await Model.findByPk(id, {
+      attributes: ["id", "name", ["alias_name", "aliasName"]],
+    });
+
+    return details;
+  };
+
   return Model;
 };
