@@ -23,10 +23,12 @@ export class LeafPage {
   activatedRoute = inject(ActivatedRoute);
   router = inject(Router);
   @ViewChild('filterType') filterType: any;
+  @ViewChild('countedType') countedType: any;
   leaf: LeafInterface | null = null;
   dataTypes: DataTypeInterface[] = [];
   lines: any[] = [];
   linesHeaders: { label: string, value: string }[] = [];
+  total: number = 0;
 
   ngOnInit() {
     this.onLoad();
@@ -62,6 +64,25 @@ export class LeafPage {
     }
   }
 
+  onCountedFilter() {
+    if (this.countedType && this.countedType.nativeElement) {
+      const dataType = this.dataTypes.find(
+        (dataType) => dataType.id === +this.countedType.nativeElement.value
+      );
+      if (dataType && this.leaf) {
+        this.leaf.datasCounted = this.leaf.datasCounted || [];
+        this.leaf.datasCounted.push({
+          id: -1,
+          include: true,
+          label: dataType.label,
+          type: "counted",
+          columnName: dataType.columnName,
+          columnFilter: "",
+        });
+      }
+    }
+  }
+
   onSave() {
     if (this.leaf) {
       this.treeService.saveLeaf(this.leaf).then(() => {
@@ -78,8 +99,9 @@ export class LeafPage {
 
   onPreview() {
     if (this.leaf) {
-      this.treeService.previewLeaf(this.leaf).then((lines: any) => {
+      this.treeService.previewLeaf(this.leaf).then(({ lines, total }) => {
         console.log(lines);
+        this.total = total;
         this.lines = lines;
         this.linesHeaders = Object.keys(lines[0]).map((key) => {
           const type = this.dataTypes.find((dataType) => dataType.columnName === key);

@@ -1,7 +1,7 @@
 import { Op } from "sequelize";
 
 export default (sequelizeInstance, Model) => {
-  Model.sync = async (datasFilters, leafId) => {
+  Model.sync = async (datasFilters, leafId, type) => {
     const ids = [];
     for (let i = 0; i < datasFilters.length; i++) {
       const { id, columnName, include, columnFilter, type } = datasFilters[i];
@@ -32,6 +32,7 @@ export default (sequelizeInstance, Model) => {
     await Model.destroy({
       where: {
         leaf_id: leafId,
+        type,
         id: {
           [Op.notIn]: ids,
         },
@@ -39,9 +40,9 @@ export default (sequelizeInstance, Model) => {
     });
   };
 
-  Model.listByLeafId = async (leafId) => {
+  Model.listByLeafId = async (leafId, type = "") => {
     const list = await Model.findAll({
-      where: { leaf_id: leafId },
+      where: { leaf_id: leafId, type },
       attributes: [
         "id",
         ["column_name", "columnName"],
@@ -62,10 +63,9 @@ export default (sequelizeInstance, Model) => {
     return list;
   };
 
-  Model.previewDatas = async (datasFilters) => {
-    let allDatas = await Model.models.datasv1.findAll({
-      raw: true,
-    });
+  Model.previewDatas = async (datasFilters, datasCounted) => {
+    const andFilters = [];
+
     for (let i = 0; i < datasFilters.length; i++) {
       const { columnName, include, columnFilter, type } = datasFilters[i];
       const findElement = await Model.models.datasindex.findOne({
@@ -75,14 +75,41 @@ export default (sequelizeInstance, Model) => {
 
       if (findElement) {
         const realColumName = findElement.column_name;
-        allDatas = allDatas.filter((data) => {
-          const regex = new RegExp(columnFilter, "g");
-          return regex.test(data[realColumName] || "");
-        });
+        andFilters[realColumName] = {
+          [Op.regexp]: columnFilter,
+        };
       }
     }
 
-    return allDatas;
+    const allDatas = await Model.models.datasv1.findAll({
+      where: {
+        ...andFilters,
+      },
+      raw: true,
+    });
+
+    let total = 0;
+    if (datasCounted && datasCounted.length > 0) {
+      for (let i = 0; i < datasCounted.length; i++) {
+        const { columnName, include, columnFilter, type } = datasCounted[i];
+        const findElement = await Model.models.datasindex.findOne({
+          where: { column_name: columnName },
+          raw: true,
+        });
+
+        if (findElement) {
+          const realColumName = findElement.column_name;
+          allDatas.forEach((element) => {
+            const value = element[realColumName] ? +element[realColumName] : 0;
+            if (value) {
+              total += value;
+            }
+          });
+        }
+      }
+    }
+
+    return { lines: allDatas, total };
   };
 
   return Model;

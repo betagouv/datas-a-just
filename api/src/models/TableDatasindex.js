@@ -94,6 +94,7 @@ export default (sequelizeInstance, Model) => {
 
     console.timeEnd("SYNC NEW DATAS");
     // tests duration 8:35.003
+    // S06_men_20250226-002025_RGC-TGI_f03.xml duration 26:00.000
   };
 
   Model.syncDataLine = async (header, line) => {

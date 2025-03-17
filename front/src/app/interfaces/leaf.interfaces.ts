@@ -5,4 +5,5 @@ export interface LeafInterface {
     name: string;
     aliasName: string;
     datasFilters: DataTypeInterface[];
+    datasCounted: DataTypeInterface[];
 }

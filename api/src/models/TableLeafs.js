@@ -18,13 +18,26 @@ export default (sequelizeInstance, Model) => {
     });
 
     if (details) {
-      details.datasFilters = await Model.models.leafsqueries.listByLeafId(id);
+      details.datasFilters = await Model.models.leafsqueries.listByLeafId(
+        id,
+        "filter"
+      );
+      details.datasCounted = await Model.models.leafsqueries.listByLeafId(
+        id,
+        "counted"
+      );
     }
 
     return details;
   };
 
-  Model.update = async ({ id, name, aliasName, datasFilters }) => {
+  Model.update = async ({
+    id,
+    name,
+    aliasName,
+    datasFilters,
+    datasCounted,
+  }) => {
     const leaf = await Model.findByPk(id);
 
     if (leaf) {
@@ -33,14 +46,18 @@ export default (sequelizeInstance, Model) => {
 
       await leaf.save();
 
-      await Model.models.leafsqueries.sync(datasFilters, id);
+      await Model.models.leafsqueries.sync(datasFilters || [], id, "filter");
+      await Model.models.leafsqueries.sync(datasCounted || [], id, "counted");
     }
 
     return leaf;
   };
 
-  Model.previewDatas = async ({ datasFilters }) => {
-    return await Model.models.leafsqueries.previewDatas(datasFilters);
+  Model.previewDatas = async ({ datasFilters, datasCounted }) => {
+    return await Model.models.leafsqueries.previewDatas(
+      datasFilters,
+      datasCounted
+    );
   };
 
   return Model;

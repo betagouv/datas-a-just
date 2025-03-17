@@ -45,23 +45,34 @@ export default class RouteLeafs extends Route {
       name: Types.string(),
       aliasName: Types.string(),
       datasFilters: Types.array(),
+      datasCounted: Types.array(),
     }),
   })
   async save(ctx) {
-    const { id, name, aliasName, datasFilters } = this.body(ctx);
+    const { id, name, aliasName, datasFilters, datasCounted } = this.body(ctx);
     this.sendOk(
       ctx,
-      await this.model.update({ id, name, aliasName, datasFilters })
+      await this.model.update({
+        id,
+        name,
+        aliasName,
+        datasFilters,
+        datasCounted,
+      })
     );
   }
 
   @Route.Put({
     bodyType: Types.object().keys({
       datasFilters: Types.array(),
+      datasCounted: Types.array(),
     }),
   })
   async preview(ctx) {
-    const { datasFilters } = this.body(ctx);
-    this.sendOk(ctx, await this.model.previewDatas({ datasFilters }));
+    const { datasFilters, datasCounted } = this.body(ctx);
+    this.sendOk(
+      ctx,
+      await this.model.previewDatas({ datasFilters, datasCounted })
+    );
   }
 }

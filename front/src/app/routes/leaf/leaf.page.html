@@ -35,6 +35,27 @@
         </div>
     </div>
 
+    <div class="requested-counted">
+        <label>Calculés :</label>
+        <p *ngIf="(leaf.datasCounted || []).length === 0">Aucuns</p>
+        <div *ngFor="let filter of (leaf.datasCounted || []); let index = index">
+            <div class="filter grid-triple">
+                <span>TYPE : {{filter.label}}</span>
+                <button (click)="leaf.datasCounted.splice(index, 1)">Supprimer</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="add-filter">
+        <label>Ajouter un élément à compter :</label>
+        <div>
+            <select #countedType>
+                <option *ngFor="let type of dataTypes" [value]="type.id">{{type.label}}</option>
+            </select>
+            <button (click)="onCountedFilter()">Ajouter</button>
+        </div>
+    </div>
+
     <div class="actions">
         <button (click)="onSave()">Sauvegarder</button>
         <button (click)="onCancel()">Annuler</button>
@@ -43,6 +64,7 @@
 
     <div class="preview" *ngIf="lines.length">
         <h3>Prévisualisation</h3>
+        <p>Resultat: {{total}}</p>
         <table>
             <thead>
                 <tr>
