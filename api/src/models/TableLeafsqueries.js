@@ -4,7 +4,7 @@ export default (sequelizeInstance, Model) => {
   Model.sync = async (datasFilters, leafId, type) => {
     const ids = [];
     for (let i = 0; i < datasFilters.length; i++) {
-      const { id, columnName, include, columnFilter, type } = datasFilters[i];
+      const { id, columnName, include, columnFilter } = datasFilters[i];
       const findElement = await Model.findOne({
         where: { column_name: columnName, leaf_id: leafId },
       });
@@ -14,7 +14,7 @@ export default (sequelizeInstance, Model) => {
           include: include,
           column_name: columnName,
           column_filter: columnFilter,
-          type: type,
+          type,
         });
         ids.push(id);
       } else {
@@ -23,7 +23,7 @@ export default (sequelizeInstance, Model) => {
           include: include,
           column_name: columnName,
           column_filter: columnFilter,
-          type: type,
+          type,
         });
         ids.push(newElement.id);
       }

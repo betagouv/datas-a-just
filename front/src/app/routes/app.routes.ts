@@ -1,16 +1,17 @@
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
+  {
+    path: '',
+    redirectTo: '/feuilles',
+    pathMatch: 'full',
+  },
   /*{
     path: 'login',
     redirectTo: '/connexion',
     pathMatch: 'full',
   },
-  {
-    path: '',
-    redirectTo: '/connexion',
-    pathMatch: 'full',
-  },
+  
   {
     path: 'connexion',
     loadComponent: () =>

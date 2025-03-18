@@ -15,14 +15,8 @@
     <div class="requested-filters">
         <label>Filtres :</label>
         <p *ngIf="(leaf.datasFilters || []).length === 0">Aucuns</p>
-        <div *ngFor="let filter of (leaf.datasFilters || []); let index = index">
-            <div class="filter grid-triple">
-                <span>TYPE : {{filter.label}}</span>
-                <p>FILTRE : <input [(ngModel)]="filter.columnFilter" /> (regex pour <a href="https://regex101.com/"
-                        target="_blank">tester</a>)</p>
-                <button (click)="leaf.datasFilters.splice(index, 1)">Supprimer</button>
-            </div>
-        </div>
+        <app-leaf-data *ngFor="let filter of (leaf.datasFilters || []); let index = index" [filter]="filter"
+            (onRemove)="leaf.datasFilters.splice(index, 1)"></app-leaf-data>
     </div>
 
     <div class="add-filter">

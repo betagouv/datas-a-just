@@ -1,0 +1,16 @@
+<ng-template [ngIf]="filter">
+    <div class="filter grid-triple">
+        <span>TYPE : {{filter.label}}</span>
+        <div>
+            <p>FILTRE : <input [(ngModel)]="filter.columnFilter" /> (regex pour <a href="https://regex101.com/"
+                    target="_blank">tester</a>)</p>
+            <div class="preview-datas">
+                Données existantes : <select>
+                    <option *ngFor="let l of lines" [value]="l.value">{{l.value}} {{isMatch(l.value) ? ' - ✔' : ''}}
+                    </option>
+                </select>
+            </div>
+        </div>
+        <button (click)="onRemove.emit()">Supprimer</button>
+    </div>
+</ng-template>

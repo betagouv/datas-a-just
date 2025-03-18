@@ -10,4 +10,8 @@ export class DatasService {
   getTypeOfDatas() {
     return this.serverService.get(`datas/datas-types-list`);
   }
+
+  getDatasList(columnName: string) {
+    return this.serverService.get(`datas/datas-list/${columnName}`);
+  }
 }

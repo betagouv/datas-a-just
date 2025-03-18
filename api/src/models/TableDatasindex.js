@@ -141,6 +141,19 @@ export default (sequelizeInstance, Model) => {
     return list;
   };
 
+  Model.datasGrouped = async (columnName) => {
+    const list = await Model.models.datasv1.findAll({
+      attributes: [
+        [columnName, "value"],
+        [Model.sequelize.fn("COUNT", columnName), "count"],
+      ],
+      group: [columnName],
+      raw: true,
+    });
+
+    return list;
+  };
+
   setTimeout(() => {
     Model.syncDatas();
   }, 1000);

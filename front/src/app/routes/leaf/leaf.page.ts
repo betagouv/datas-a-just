@@ -6,6 +6,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DatasService } from '../../services/datas/datas.service';
 import { DataTypeInterface } from '../../interfaces/data-type';
+import { LeafDataComponent } from './leaf-data/leaf-data.component';
+import { sortBy } from 'lodash';
 
 /**
  * Page de qui sommes nous
@@ -13,7 +15,7 @@ import { DataTypeInterface } from '../../interfaces/data-type';
 
 @Component({
   standalone: true,
-  imports: [RouterModule, CommonModule, FormsModule],
+  imports: [RouterModule, CommonModule, FormsModule, LeafDataComponent],
   templateUrl: './leaf.page.html',
   styleUrls: ['./leaf.page.scss'],
 })
@@ -41,7 +43,7 @@ export class LeafPage {
       this.leaf = leaf;
     });
     this.datasService.getTypeOfDatas().then((dataTypes) => {
-      this.dataTypes = dataTypes;
+      this.dataTypes = sortBy(dataTypes, 'label');
     });
   }
 

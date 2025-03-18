@@ -20,4 +20,12 @@ export default class RouteDatas extends Route {
   async datasTypesList(ctx) {
     this.sendOk(ctx, await this.model.list());
   }
+
+  @Route.Get({
+    path: "/datas-list/:columnName",
+  })
+  async datasList(ctx) {
+    const { columnName } = ctx.params;
+    this.sendOk(ctx, await this.model.datasGrouped(columnName));
+  }
 }
