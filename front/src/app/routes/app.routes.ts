@@ -28,8 +28,18 @@ export const routes: Routes = [
       import('./leaf/leaf.page').then((mod) => mod.LeafPage),
   },
   {
+    path: 'branches',
+    loadComponent: () =>
+      import('./branchs/branchs.page').then((mod) => mod.BranchsPage),
+  },
+  {
+    path: 'editer-branche/:id',
+    loadComponent: () =>
+      import('./edit-branch/edit-branch.page').then((mod) => mod.EditBranchPage),
+  },
+  /*{
     path: '**',
     redirectTo: '/connexion',
     pathMatch: 'full',
-  },
+  },*/
 ];

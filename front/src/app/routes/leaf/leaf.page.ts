@@ -5,9 +5,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DatasService } from '../../services/datas/datas.service';
-import { DataTypeInterface } from '../../interfaces/data-type';
 import { LeafDataComponent } from './leaf-data/leaf-data.component';
-import { sortBy } from 'lodash';
 
 /**
  * Page de qui sommes nous
@@ -27,7 +25,6 @@ export class LeafPage {
   @ViewChild('filterType') filterType: any;
   @ViewChild('countedType') countedType: any;
   leaf: LeafInterface | null = null;
-  dataTypes: DataTypeInterface[] = [];
   lines: any[] = [];
   linesHeaders: { label: string, value: string }[] = [];
   total: number = 0;
@@ -42,14 +39,11 @@ export class LeafPage {
     this.treeService.getLeafDetails(id).then((leaf) => {
       this.leaf = leaf;
     });
-    this.datasService.getTypeOfDatas().then((dataTypes) => {
-      this.dataTypes = sortBy(dataTypes, 'label');
-    });
   }
 
   onAddFilter() {
     if (this.filterType && this.filterType.nativeElement) {
-      const dataType = this.dataTypes.find(
+      const dataType = this.datasService.dataTypes().find(
         (dataType) => dataType.id === +this.filterType.nativeElement.value
       );
       if (dataType && this.leaf) {
@@ -68,7 +62,7 @@ export class LeafPage {
 
   onCountedFilter() {
     if (this.countedType && this.countedType.nativeElement) {
-      const dataType = this.dataTypes.find(
+      const dataType = this.datasService.dataTypes().find(
         (dataType) => dataType.id === +this.countedType.nativeElement.value
       );
       if (dataType && this.leaf) {
@@ -106,7 +100,7 @@ export class LeafPage {
         this.total = total;
         this.lines = lines;
         this.linesHeaders = Object.keys(lines[0]).map((key) => {
-          const type = this.dataTypes.find((dataType) => dataType.columnName === key);
+          const type = this.datasService.dataTypes().find((dataType) => dataType.columnName === key);
           if (type) { return { label: type.label, value: key }; }
           return { label: key, value: key };
         });

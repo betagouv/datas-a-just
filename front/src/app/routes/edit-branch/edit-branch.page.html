@@ -1,0 +1,36 @@
+<ng-template [ngIf]="branch">
+    <h2>{{branch.id === -1 ? 'Création d\'une nouvelle branche' : 'Edition de la branche'}}</h2>
+
+    <div class="grid-double">
+        <div class="input-row">
+            <label>Nom : </label>
+            <input [(ngModel)]="branch.name" placeholder="Nom de la branche" />
+        </div>
+        <div class="input-row">
+            <label>Alias : </label>
+            <input [(ngModel)]="branch.aliasName" placeholder="Alias de la branche" />
+        </div>
+    </div>
+
+    <div class="sub-branchs">
+        <label>Sous-branches :</label>
+        <div>
+            <div *ngFor="let child of (branch.children || [])">
+                <branch-view [branch]="child" [editabled]="true"></branch-view>
+            </div>
+        </div>
+    </div>
+
+    <div class="choose">
+        <select #chooseChild>
+            <option *ngFor="let branch of allBranchs" [value]="branch.id">{{branch.name}} (v{{branch.version}})
+            </option>
+        </select>
+        <button (click)="onAddChild(chooseChild)">+</button>
+    </div>
+
+    <div class="actions">
+        <button (click)="onSave()">Sauvegarder</button>
+        <button (click)="onCancel()">Annuler</button>
+    </div>
+</ng-template>

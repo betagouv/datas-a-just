@@ -1,0 +1,8 @@
+<h2>Les Branches</h2>
+
+<a [routerLink]="['/editer-branche/-1']"><button>Ajouter une branche</button></a>
+
+<div *ngFor="let branch of branchs" class="branch-item">
+    #{{branch.id}} - Branche : {{ branch.name }} (v{{branch.version}}) - <a
+        [routerLink]="'/editer-branche/'+branch.id">Editer</a>
+</div>

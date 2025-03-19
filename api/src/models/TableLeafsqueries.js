@@ -40,15 +40,17 @@ export default (sequelizeInstance, Model) => {
     });
   };
 
-  Model.listByLeafId = async (leafId, type = "") => {
+  Model.listByLeafId = async (leafId, type = "", parentLeafQueryId = null) => {
     const list = await Model.findAll({
-      where: { leaf_id: leafId, type },
+      where: { leaf_id: leafId, type, parent_leaf_query_id: parentLeafQueryId },
       attributes: [
         "id",
         ["column_name", "columnName"],
         "include",
         ["column_filter", "columnFilter"],
         "type",
+        ["or_group", "orGroup"],
+        ["parent_leaf_query_id", "parentLeafQueryId"],
       ],
       raw: true,
     });
@@ -58,6 +60,10 @@ export default (sequelizeInstance, Model) => {
         where: { column_name: list[i].columnName },
       });
       list[i].label = findElement ? findElement.label : list[i].columnName;
+      const children = await Model.listByLeafId(leafId, type, list[i].id);
+      if (children && children.length > 0) {
+        list[i].children = children;
+      }
     }
 
     return list;

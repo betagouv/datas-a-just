@@ -74,6 +74,7 @@ export default (sequelizeInstance, Model) => {
           } else if (tag === secondTag) {
             secondTag = getXMLTagName(lineFormated);
             dataLines = headerMap.map(() => ""); // create empty map
+            dataLines[0] = file;
           } else if (`</${secondTag}>` === lineFormated) {
             await Model.syncDataLine(headerMap, dataLines);
           } else if (nbLine > 2) {

@@ -1,0 +1,19 @@
+<ng-template [ngIf]="branch">
+  <p>Branche {{branch.name}} (v {{branch.version}})</p>
+
+  <div class="sub-branchs">
+    <div>
+      <div *ngFor="let child of (branch.children || [])">
+        <branch-view [branch]="child" [editabled]="true"></branch-view>
+      </div>
+    </div>
+  </div>
+
+  <div class="choose">
+    <select #chooseChild>
+      <option *ngFor="let branch of allBranchs" [value]="branch.id">{{branch.name}} (v{{branch.version}})
+      </option>
+    </select>
+    <button (click)="onAddChild(chooseChild)">+</button>
+  </div>
+</ng-template>

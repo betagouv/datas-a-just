@@ -1,6 +1,10 @@
 <ng-template [ngIf]="filter">
     <div class="filter grid-triple">
-        <span>TYPE : {{filter.label}}</span>
+        <span>TYPE : {{filter.label}}
+            <!-- <select [(ngModel)]="filter.label">
+                <option *ngFor="let type of this.datasService.dataTypes()" [value]="type.id">{{type.label}}</option>
+            </select> -->
+        </span>
         <div>
             <p>FILTRE : <input [(ngModel)]="filter.columnFilter" /> (regex pour <a href="https://regex101.com/"
                     target="_blank">tester</a>)</p>
@@ -12,5 +16,6 @@
             </div>
         </div>
         <button (click)="onRemove.emit()">Supprimer</button>
+        <!-- <button (click)="onAddOr()">Ajouter OR</button> -->
     </div>
 </ng-template>

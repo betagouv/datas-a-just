@@ -23,7 +23,7 @@
         <label>Ajouter un filtre :</label>
         <div>
             <select #filterType>
-                <option *ngFor="let type of dataTypes" [value]="type.id">{{type.label}}</option>
+                <option *ngFor="let type of this.datasService.dataTypes()" [value]="type.id">{{type.label}}</option>
             </select>
             <button (click)="onAddFilter()">Ajouter</button>
         </div>
@@ -44,7 +44,7 @@
         <label>Ajouter un élément à compter :</label>
         <div>
             <select #countedType>
-                <option *ngFor="let type of dataTypes" [value]="type.id">{{type.label}}</option>
+                <option *ngFor="let type of this.datasService.dataTypes()" [value]="type.id">{{type.label}}</option>
             </select>
             <button (click)="onCountedFilter()">Ajouter</button>
         </div>

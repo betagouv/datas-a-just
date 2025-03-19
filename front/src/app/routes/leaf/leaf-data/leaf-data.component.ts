@@ -39,4 +39,8 @@ export class LeafDataComponent implements OnChanges {
     return false;
   }
 
+  onAddOr() {
+    console.log('onAddOr')
+  }
+
 }

@@ -2,7 +2,7 @@ import Sequelize from "sequelize";
 
 export default (sequelizeInstance) => {
   const Model = sequelizeInstance.define(
-    "leafsqueries",
+    "branchs",
     {
       id: {
         type: Sequelize.INTEGER,
@@ -11,38 +11,27 @@ export default (sequelizeInstance) => {
         autoIncrement: true,
         unique: true,
       },
-      leaf_id: {
+      name: {
+        type: Sequelize.STRING(255),
+        allowNull: true,
+      },
+      alias_name: {
+        type: Sequelize.STRING(255),
+        allowNull: true,
+      },
+      version: {
         type: Sequelize.INTEGER,
+        defaultValue: 0,
         allowNull: false,
       },
-      include: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: true,
+      parent_id: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
+      rank: {
+        type: Sequelize.INTEGER,
+        defaultValue: 0,
         allowNull: false,
-      },
-      column_name: {
-        type: Sequelize.STRING(255),
-        allowNull: true,
-      },
-      column_filter: {
-        type: Sequelize.STRING(255),
-        allowNull: true,
-      },
-      type: {
-        type: Sequelize.STRING(255),
-        allowNull: true,
-      },
-      or_group: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-      },
-      parent_leaf_query_id: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-      },
-      data_index_id: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
       },
       created_at: {
         allowNull: false,

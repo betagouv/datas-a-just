@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { ServerService } from '../http-server/server.service';
 import { LeafInterface } from '../../interfaces/leaf.interfaces';
+import { BranchInterface } from '../../interfaces/branch.interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -26,5 +27,21 @@ export class TreeService {
 
   previewLeaf(leaf: LeafInterface) {
     return this.serverService.put(`leafs/preview`, leaf);
+  }
+
+  getBranchs() {
+    return this.serverService.get(`branchs/list`);
+  }
+
+  getAllBranchs(id: string | null = null) {
+    return this.serverService.post(`branchs/all-list`, { id });
+  }
+
+  getBranchDetail(id: string) {
+    return this.serverService.get(`branchs/get-details/${id}`);
+  }
+
+  saveBranch(branch: BranchInterface) {
+    return this.serverService.put(`branchs/save`, branch);
   }
 }
