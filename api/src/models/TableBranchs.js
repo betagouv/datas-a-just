@@ -48,5 +48,67 @@ export default (sequelizeInstance, Model) => {
     return branch;
   };
 
+  Model.request = async (queries) => {
+    console.log("queries", queries);
+    let { b: id, f, type } = queries;
+    const branchDetails = await Model.getDetails(id);
+    console.log(branchDetails);
+
+    if (!branchDetails) {
+      return null;
+    }
+
+    if (!type) {
+      type = "branch";
+    }
+
+    const moreFilter = [];
+    if (!f) {
+      f = [];
+    } else if (f && !Array.isArray(f)) {
+      f = [f];
+    }
+
+    for (let i = 0; i < f.length; i++) {
+      const found = f[i].split("]");
+      if (found.length > 1) {
+        moreFilter.push({
+          columnLabel: found[0].replace("[", ""),
+          columnFilter: found.slice(1).join("]"),
+        });
+      }
+    }
+
+    const leafs = branchDetails.leafs || [];
+    for (let i = 0; i < leafs.length; i++) {
+      const leaf = leafs[i];
+      const leafDetails = await Model.models.leafs.getDetails(leaf.id);
+      const datasFilters = leafDetails.datasFilters || [];
+      const datasCounted = leafDetails.datasCounted || [];
+      const datas = await Model.models.leafsqueries.previewDatas(
+        [...datasFilters, ...moreFilter],
+        datasCounted
+      );
+
+      leafs[i] = { ...leafDetails, datas };
+      //console.log(leafDetails, datas);
+    }
+
+    switch (type) {
+      case "preview":
+        const preview = {
+          id: branchDetails.id,
+          name: branchDetails.name,
+        };
+        const leafs = branchDetails.leafs || [];
+        leafs.forEach((leaf) => {
+          preview[leaf.aliasName] = leaf.datas.total;
+        });
+        return preview;
+      default:
+        return branchDetails;
+    }
+  };
+
   return Model;
 };

@@ -73,9 +73,17 @@ export default (sequelizeInstance, Model) => {
     const andFilters = [];
 
     for (let i = 0; i < datasFilters.length; i++) {
-      const { columnName, include, columnFilter, type } = datasFilters[i];
+      const { columnName, columnLabel, include, columnFilter, type } =
+        datasFilters[i];
+      const where = {};
+      if (columnName) {
+        where.column_name = columnName;
+      }
+      if (columnLabel) {
+        where.label = columnLabel;
+      }
       const findElement = await Model.models.datasindex.findOne({
-        where: { column_name: columnName },
+        where,
         raw: true,
       });
 
@@ -97,9 +105,17 @@ export default (sequelizeInstance, Model) => {
     let total = 0;
     if (datasCounted && datasCounted.length > 0) {
       for (let i = 0; i < datasCounted.length; i++) {
-        const { columnName, include, columnFilter, type } = datasCounted[i];
+        const { columnName, columnLabel, include, columnFilter, type } =
+          datasCounted[i];
+        const where = {};
+        if (columnName) {
+          where.column_name = columnName;
+        }
+        if (columnLabel) {
+          where.label = columnLabel;
+        }
         const findElement = await Model.models.datasindex.findOne({
-          where: { column_name: columnName },
+          where,
           raw: true,
         });
 
