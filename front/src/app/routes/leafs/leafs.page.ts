@@ -1,6 +1,4 @@
 import { Component, inject } from '@angular/core';
-import { WrapperNoConnectedComponent } from '../../components/wrapper-no-connected/wrapper-no-connected.component';
-import { BackButtonComponent } from '../../components/back-button/back-button.component';
 import { TreeService } from '../../services/tree/tree.service';
 import { LeafInterface } from '../../interfaces/leaf.interfaces';
 import { RouterModule } from '@angular/router';
@@ -12,7 +10,7 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   standalone: true,
-  imports: [WrapperNoConnectedComponent, BackButtonComponent, RouterModule, CommonModule],
+  imports: [RouterModule, CommonModule],
   templateUrl: './leafs.page.html',
   styleUrls: ['./leafs.page.scss'],
 })

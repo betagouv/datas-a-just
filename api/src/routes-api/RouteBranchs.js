@@ -44,16 +44,18 @@ export default class RouteBranchs extends Route {
       id: Types.number(),
       name: Types.string(),
       aliasName: Types.string(),
+      leafs: Types.array(),
     }),
   })
   async save(ctx) {
-    const { id, name, aliasName } = this.body(ctx);
+    const { id, name, aliasName, leafs } = this.body(ctx);
     this.sendOk(
       ctx,
       await this.model.update({
         id,
         name,
         aliasName,
+        leafs,
       })
     );
   }

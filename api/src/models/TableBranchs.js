@@ -22,12 +22,13 @@ export default (sequelizeInstance, Model) => {
     });
 
     if (details) {
+      details.leafs = await Model.models.branchleafs.listLeafs(id);
     }
 
     return details;
   };
 
-  Model.update = async ({ id, name, aliasName }) => {
+  Model.update = async ({ id, name, aliasName, leafs }) => {
     let branch = await Model.findByPk(id);
 
     if (branch) {
@@ -41,6 +42,8 @@ export default (sequelizeInstance, Model) => {
         alias_name: aliasName,
       });
     }
+
+    await Model.models.branchleafs.sync(leafs, branch.id);
 
     return branch;
   };
