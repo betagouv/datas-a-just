@@ -55,6 +55,7 @@ export class LeafPage {
           type: "filter",
           columnName: dataType.columnName,
           columnFilter: "",
+          children: [],
         });
       }
     }
@@ -74,6 +75,7 @@ export class LeafPage {
           type: "counted",
           columnName: dataType.columnName,
           columnFilter: "",
+          children: [],
         });
       }
     }

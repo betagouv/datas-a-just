@@ -16,6 +16,15 @@
             </div>
         </div>
         <button (click)="onRemove.emit()">Supprimer</button>
-        <!-- <button (click)="onAddOr()">Ajouter OR</button> -->
+    </div>
+    @for(child of filter.children; track child.id; let index = $index) {
+    <app-leaf-data [filter]="child" [isChild]="true" (onRemove)="filter.children.splice(index, 1)"></app-leaf-data>
+    }
+    <div class="add-filter" *ngIf="!isChild">
+        <label>Ajouter un filtre en OU :</label>
+        <select #filterType>
+            <option *ngFor="let type of this.datasService.dataTypes()" [value]="type.id">{{type.label}}</option>
+        </select>
+        <button (click)="onAddOr()">Ajouter OU</button>
     </div>
 </ng-template>

@@ -2,10 +2,24 @@
 
 :host {
   display: block;
-  margin-bottom: 32px;
   border: 1px solid black;
 }
 
 .preview-datas {
   margin-top: 16px;
+}
+
+.add-filter {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 16px;
+
+  label {
+    white-space: nowrap;
+  }
+
+  select {
+    flex: 1;
+  }
 }

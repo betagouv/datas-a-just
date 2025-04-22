@@ -9,6 +9,6 @@ export interface DataTypeInterface {
   columnFilter: string;
   orGroup?: number;
   parentLeafQueryId?: number;
-  children?: DataTypeInterface[];
+  children: DataTypeInterface[];
   dataIndex?: DataIndexInterface;
 }

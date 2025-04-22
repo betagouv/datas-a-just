@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnChanges, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnChanges, Output, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DatasService } from '../../../services/datas/datas.service';
@@ -14,7 +14,9 @@ import { sortBy } from 'lodash';
 })
 export class LeafDataComponent implements OnChanges {
   datasService = inject(DatasService);
+  @ViewChild('filterType') filterType: any;
   @Input() filter: DataTypeInterface | null = null;
+  @Input() isChild = false;
   @Output() onRemove = new EventEmitter();
   lines: { value: string; count: number }[] = [];
 
@@ -40,7 +42,23 @@ export class LeafDataComponent implements OnChanges {
   }
 
   onAddOr() {
-    console.log('onAddOr')
+    if (this.filterType && this.filterType.nativeElement) {
+      const dataType = this.datasService.dataTypes().find(
+        (dataType) => dataType.id === +this.filterType.nativeElement.value
+      );
+      if (dataType && this.filter) {
+        this.filter.children = this.filter.children || [];
+        this.filter.children.push({
+          id: (this.filter.children.length + 1) * -1,
+          include: true,
+          label: dataType.label,
+          type: "filter",
+          columnName: dataType.columnName,
+          columnFilter: "",
+          children: [],
+        });
+      }
+    }
   }
 
 }
