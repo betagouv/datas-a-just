@@ -37,6 +37,11 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./edit-branch/edit-branch.page').then((mod) => mod.EditBranchPage),
   },
+  {
+    path: 'preview/html/:id',
+    loadComponent: () =>
+      import('./preview/branch-html/branch-html.page').then((mod) => mod.BranchHTMLPage),
+  },
   /*{
     path: '**',
     redirectTo: '/connexion',

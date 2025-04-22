@@ -49,10 +49,8 @@ export default (sequelizeInstance, Model) => {
   };
 
   Model.request = async (queries) => {
-    console.log("queries", queries);
     let { b: id, f, type } = queries;
     const branchDetails = await Model.getDetails(id);
-    console.log(branchDetails);
 
     if (!branchDetails) {
       return null;

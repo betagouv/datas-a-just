@@ -14,6 +14,10 @@ module.exports = {
    */
   serverUrl: process.env.SERVER_URL || "http://localhost:8081/api",
   /**
+   * Url du serveur (idéal pour le contenu des mails)
+   */
+  frontURL: process.env.FRONT_URL || "http://localhost:4200",
+  /**
    * Url du cors
    */
   corsUrl: process.env.FRONT_URL || null,
