@@ -83,6 +83,7 @@ export default (sequelizeInstance, Model) => {
     }
 
     const leafs = branchDetails.leafs || [];
+    // conditionnal calculate datas to perform request
     if (calculateDatas) {
       for (let i = 0; i < leafs.length; i++) {
         const leaf = leafs[i];
@@ -95,7 +96,6 @@ export default (sequelizeInstance, Model) => {
         );
 
         leafs[i] = { ...leafDetails, datas };
-        //console.log(leafDetails, datas);
       }
     }
 
