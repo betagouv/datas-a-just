@@ -18,10 +18,20 @@ export default class RouteQueries extends Route {
   @Route.Get()
   async request(ctx) {
     const queries = ctx.request.query;
-    let type = queries.type || "branch";
+    const type = queries.type || "branch";
+    const f = queries.f || "";
 
     if (type === "html") {
-      ctx.redirect(`${config.frontURL}/preview/html/${queries.b}`); // redirect to another page
+      let url = `${config.frontURL}/preview/html/${queries.b}`;
+      const queriesTab = [];
+      if (f) {
+        queriesTab.push(`f=${encodeURIComponent(f)}`);
+      }
+      if (queriesTab.length) {
+        url += `?${queriesTab.join("&")}`;
+      }
+      console.log(url);
+      ctx.redirect(url); // redirect to another page
       return;
     }
 

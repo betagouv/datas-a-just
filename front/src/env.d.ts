@@ -5,6 +5,7 @@ declare interface Env {
   // Example: NGX_VERSION: string;
   NG_APP_PRODUCTION: boolean;
   NG_APP_SERVER_URL: string;
+  NG_APP_QUERY_SERVER_URL: string;
   NG_APP_NB_DAYS_BY_MAGISTRAT: number;
   NG_APP_NB_DAYS_BY_FONCTIONNAIRE: number;
   NG_APP_NB_HOURS_PER_DAY_AND_FONCTIONNAIRE: number;
@@ -40,5 +41,5 @@ declare const _NGX_ENV_: Env;
 
 // 3. Use process.env.YOUR_ENV_VAR in your code. (deprecated)
 declare namespace NodeJS {
-  export interface ProcessEnv extends Env {}
+  export interface ProcessEnv extends Env { }
 }

@@ -1,1 +1,18 @@
-@import '../../../styles/utils.scss';
+@import "../../../styles/utils.scss";
+
+.edge {
+  fill: none;
+  stroke: gray;
+  stroke-width: 2px;
+}
+
+.box {
+  fill: lightblue;
+  stroke: gray;
+  stroke-width: 2px;
+  transition: fill 0.2s;
+
+  &:hover {
+    fill: beige;
+  }
+}

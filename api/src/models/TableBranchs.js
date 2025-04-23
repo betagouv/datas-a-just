@@ -51,6 +51,7 @@ export default (sequelizeInstance, Model) => {
   Model.request = async (queries) => {
     let { b: id, f, type } = queries;
     const branchDetails = await Model.getDetails(id);
+    let calculateDatas = true;
 
     if (!branchDetails) {
       return null;
@@ -58,6 +59,10 @@ export default (sequelizeInstance, Model) => {
 
     if (!type) {
       type = "branch";
+    }
+
+    if (type === "branchs-preview") {
+      calculateDatas = false;
     }
 
     const moreFilter = [];
@@ -78,22 +83,24 @@ export default (sequelizeInstance, Model) => {
     }
 
     const leafs = branchDetails.leafs || [];
-    for (let i = 0; i < leafs.length; i++) {
-      const leaf = leafs[i];
-      const leafDetails = await Model.models.leafs.getDetails(leaf.id);
-      const datasFilters = leafDetails.datasFilters || [];
-      const datasCounted = leafDetails.datasCounted || [];
-      const datas = await Model.models.leafsqueries.previewDatas(
-        [...datasFilters, ...moreFilter],
-        datasCounted
-      );
+    if (calculateDatas) {
+      for (let i = 0; i < leafs.length; i++) {
+        const leaf = leafs[i];
+        const leafDetails = await Model.models.leafs.getDetails(leaf.id);
+        const datasFilters = leafDetails.datasFilters || [];
+        const datasCounted = leafDetails.datasCounted || [];
+        const datas = await Model.models.leafsqueries.previewDatas(
+          [...datasFilters, ...moreFilter],
+          datasCounted
+        );
 
-      leafs[i] = { ...leafDetails, datas };
-      //console.log(leafDetails, datas);
+        leafs[i] = { ...leafDetails, datas };
+        //console.log(leafDetails, datas);
+      }
     }
 
     switch (type) {
-      case "preview":
+      case "preview": {
         const preview = {
           id: branchDetails.id,
           name: branchDetails.name,
@@ -103,6 +110,15 @@ export default (sequelizeInstance, Model) => {
           preview[leaf.aliasName] = leaf.datas.total;
         });
         return preview;
+      }
+      case "branchs-preview": {
+        const preview = {
+          id: branchDetails.id,
+          name: branchDetails.name,
+        };
+
+        return preview;
+      }
       default:
         return branchDetails;
     }

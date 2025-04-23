@@ -9,9 +9,14 @@ export class ServerService {
   _http = inject(HttpService);
   userToken: BehaviorSubject<any> = new BehaviorSubject<any>(null);
   serverUrl: string = import.meta.env.NG_APP_SERVER_URL;
+  queryServerUrl: string = import.meta.env.NG_APP_QUERY_SERVER_URL;
 
   getUrl(url: string): string {
     return this.serverUrl + url;
+  }
+
+  getQueryUrl(url: string): string {
+    return this.queryServerUrl + url;
   }
 
   handleError(error: any) {
@@ -76,11 +81,11 @@ export class ServerService {
   }
 
   /* HTTPs request */
-  get(url: string, options = {}): Promise<any> {
-    console.log('HTTP GET ' + this.getUrl(url));
+  async get(url: string, options = { queryUrl: false }): Promise<any> {
+    console.log('HTTP GET ' + options['queryUrl'] ? this.getQueryUrl(url) : this.getUrl(url));
     //this.appService.setIsLoading(true);
     return this._http
-      .get(this.getUrl(url), options)
+      .get(options['queryUrl'] ? this.getQueryUrl(url) : this.getUrl(url), options)
       .then((r) => {
         //this.appService.setIsLoading(false);
         return r.data;

@@ -1,1 +1,13 @@
-Bonjour
+<div>
+    <svg xmlns:xhtml="http://www.w3.org/1999/xhtml" width="800" height="400">
+        <g *ngFor="let edge of edges" class="edge">
+            <path class="edge" [attr.d]="edge.path"></path>
+        </g>
+        <g *ngFor="let box of boxes" class="box">
+            <rect [attr.x]="box.x" [attr.y]="box.y" [attr.width]="box.width" [attr.height]="box.height" />
+            <text [attr.x]="box.x + 10" [attr.y]="box.y + 24">
+                {{box.label}}
+            </text>
+        </g>
+    </svg>
+</div>
