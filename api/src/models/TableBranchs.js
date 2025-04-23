@@ -23,12 +23,13 @@ export default (sequelizeInstance, Model) => {
 
     if (details) {
       details.leafs = await Model.models.branchleafs.listLeafs(id);
+      details.children = await Model.models.branchbranchs.listBranchs(id);
     }
 
     return details;
   };
 
-  Model.update = async ({ id, name, aliasName, leafs }) => {
+  Model.update = async ({ id, name, aliasName, leafs, children }) => {
     let branch = await Model.findByPk(id);
 
     if (branch) {
@@ -43,6 +44,7 @@ export default (sequelizeInstance, Model) => {
       });
     }
 
+    await Model.models.branchbranchs.sync(children, id);
     await Model.models.branchleafs.sync(leafs, branch.id);
 
     return branch;

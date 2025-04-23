@@ -1,8 +1,7 @@
 :host {
   display: block;
-  padding: 32px;
+  padding: 8px;
 }
-
 
 .sub-branchs {
   margin: 16px 0;
@@ -11,7 +10,7 @@
     margin-top: 8px;
     margin-bottom: 16px;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     gap: 16px;
 
     > div {

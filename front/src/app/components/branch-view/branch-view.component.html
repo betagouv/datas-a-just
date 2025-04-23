@@ -1,19 +1,19 @@
 <ng-template [ngIf]="branch">
-  <p>Branche {{branch.name}} (v {{branch.version}})</p>
+  <p>Branche {{branch.name}} (v {{branch.version}}) <u *ngIf="editabled" (click)="onRemove.emit()">supprimer</u></p>
 
-  <div class="sub-branchs">
+  <!-- <div class="sub-branchs">
     <div>
-      <div *ngFor="let child of (branch.children || [])">
-        <branch-view [branch]="child" [editabled]="true"></branch-view>
+      <div *ngFor="let child of (branch.children || []); let i = index">
+        <branch-view [branch]="child" [editabled]="true" (onRemove)="branch.children?.splice(i, 1)"></branch-view>
       </div>
     </div>
-  </div>
+  </div> -->
 
-  <div class="choose">
+  <!-- <div class="choose">
     <select #chooseChild>
       <option *ngFor="let branch of allBranchs" [value]="branch.id">{{branch.name}} (v{{branch.version}})
       </option>
     </select>
     <button (click)="onAddChild(chooseChild)">+</button>
-  </div>
+  </div> -->
 </ng-template>

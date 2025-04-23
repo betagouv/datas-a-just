@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BranchInterface } from '../../interfaces/branch.interfaces';
 import { TreeService } from '../../services/tree/tree.service';
@@ -15,6 +15,7 @@ export class BranchViewComponent implements OnInit {
   treeService = inject(TreeService);
   @Input() branch: BranchInterface | null = null;
   @Input() editabled: boolean = false;
+  @Output() onRemove = new EventEmitter<void>();
   allBranchs: BranchInterface[] = [];
 
   ngOnInit() {
