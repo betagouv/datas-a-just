@@ -9,7 +9,7 @@ export default (sequelizeInstance, Model) => {
     console.log("SYNC NEW DATAS", getPathTmpDatas());
 
     const files = readdirSync(getPathTmpDatas()).filter(
-      (f) => f.endsWith(".xml") || f.endsWith(".csv")
+      (f) => !f.includes("NOMENC") && (f.endsWith(".xml") || f.endsWith(".csv"))
     );
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
