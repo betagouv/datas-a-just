@@ -29,8 +29,8 @@ export class Edge {
 
 export class Node {
     constructor(
-        public id: string,
-        public parentId: string | null,
+        public id: number,
+        public parentId: number | null,
     ) {
     }
 }

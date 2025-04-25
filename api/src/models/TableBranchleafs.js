@@ -40,6 +40,7 @@ export default (sequelizeInstance, Model) => {
         {
           model: Model.models.leafs,
           as: "leaf",
+          required: true,
         },
       ],
       where: {

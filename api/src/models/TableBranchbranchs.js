@@ -36,19 +36,16 @@ export default (sequelizeInstance, Model) => {
 
   Model.listBranchs = async (branchId) => {
     const branchs = await Model.findAll({
-      include: [
-        {
-          model: Model.models.branchs,
-          as: "branch",
-        },
-      ],
       where: {
         from_id_branch: branchId,
       },
+      raw: true,
     });
 
     for (let i = 0; i < branchs.length; i++) {
-      branchs[i] = snakeToCamelObject(branchs[i].branch.dataValues);
+      branchs[i] = await Model.models.branchs.getDetails(
+        branchs[i].to_id_branch
+      );
     }
 
     return branchs;

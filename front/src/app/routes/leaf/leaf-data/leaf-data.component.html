@@ -1,4 +1,9 @@
 <ng-template [ngIf]="filter">
+    <ng-template [ngIf]="!isChild">
+        <p>Est une inclusion <input type="checkbox" [checked]="filter.include" (change)="onIncludeChange($event)" /> {{
+            filter.include ? 'oui' : 'non' }}</p>
+        <hr />
+    </ng-template>
     <div class="filter grid-triple">
         <span>TYPE : {{filter.label}}
             <!-- <select [(ngModel)]="filter.label">

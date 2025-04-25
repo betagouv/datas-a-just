@@ -49,6 +49,10 @@ export default (sequelizeInstance) => {
       foreignKey: "id",
       sourceKey: "to_id_branch",
     });
+    Model.belongsTo(models.branchs, {
+      foreignKey: "id",
+      sourceKey: "from_id_branch",
+    });
 
     return models;
   };

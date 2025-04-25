@@ -5,9 +5,10 @@
         </g>
         <g *ngFor="let box of boxes" class="box">
             <rect [attr.x]="box.x" [attr.y]="box.y" [attr.width]="box.width" [attr.height]="box.height" />
-            <text [attr.x]="box.x + 10" [attr.y]="box.y + 24">
+            <text [attr.x]="box.x + 10" [attr.y]="box.y + 24" class="label">
                 {{box.label}}
             </text>
         </g>
     </svg>
 </div>
+<div id="drawflow"></div>

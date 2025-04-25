@@ -21,6 +21,7 @@ export class LeafDataComponent implements OnChanges {
   lines: { value: string; count: number }[] = [];
 
   ngOnChanges() {
+    console.log('filter', this.filter);
     this.onLoad();
   }
 
@@ -61,4 +62,9 @@ export class LeafDataComponent implements OnChanges {
     }
   }
 
+  onIncludeChange(event: any) {
+    if (this.filter) {
+      this.filter.include = event.target.checked;
+    }
+  }
 }

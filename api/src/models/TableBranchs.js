@@ -16,6 +16,7 @@ export default (sequelizeInstance, Model) => {
   };
 
   Model.getDetails = async (id) => {
+    console.log("getDetails", id);
     const details = await Model.findByPk(id, {
       attributes: ["id", "name", ["alias_name", "aliasName"], "version"],
       raw: true,
@@ -106,6 +107,7 @@ export default (sequelizeInstance, Model) => {
         const preview = {
           id: branchDetails.id,
           name: branchDetails.name,
+          children: branchDetails.children,
         };
         const leafs = branchDetails.leafs || [];
         leafs.forEach((leaf) => {
@@ -117,6 +119,7 @@ export default (sequelizeInstance, Model) => {
         const preview = {
           id: branchDetails.id,
           name: branchDetails.name,
+          children: branchDetails.children,
         };
 
         return preview;

@@ -105,8 +105,7 @@ export default (sequelizeInstance, Model) => {
         const orFilters = [];
         if (children && children.length > 0) {
           for (let y = 0; y < children.length; y++) {
-            const { columnName, columnLabel, include, columnFilter, type } =
-              children[y];
+            const { columnName, columnLabel, columnFilter, type } = children[y];
             const subWhere = {};
             if (columnName) {
               subWhere.column_name = columnName;
@@ -123,7 +122,7 @@ export default (sequelizeInstance, Model) => {
               const realColumName = findSubElement.column_name;
               orFilters.push({
                 [realColumName]: {
-                  [Op.regexp]: columnFilter,
+                  [include ? Op.regexp : Op.notRegexp]: columnFilter,
                 },
               });
             }
@@ -133,12 +132,12 @@ export default (sequelizeInstance, Model) => {
         const realColumName = findElement.column_name;
         orFilters.push({
           [realColumName]: {
-            [Op.regexp]: columnFilter,
+            [include ? Op.regexp : Op.notRegexp]: columnFilter,
           },
         });
         if (orFilters.length > 0) {
           andFilters.push({
-            [Op.or]: orFilters,
+            [include ? Op.or : Op.and]: orFilters,
           });
         }
       }

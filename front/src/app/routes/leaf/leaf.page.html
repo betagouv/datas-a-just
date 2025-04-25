@@ -20,7 +20,7 @@
     </div>
 
     <div class="add-filter">
-        <label>Ajouter un filtre :</label>
+        <label>Ajouter un filtre en ET :</label>
         <div>
             <select #filterType>
                 <option *ngFor="let type of this.datasService.dataTypes()" [value]="type.id">{{type.label}}</option>
