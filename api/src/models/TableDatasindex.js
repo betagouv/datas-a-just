@@ -152,6 +152,17 @@ export default (sequelizeInstance, Model) => {
       raw: true,
     });
 
+    for (let i = 0; i < list.length; i++) {
+      const findToDoctionary = await Model.models.dictionaries.findOne({
+        where: {
+          code: list[i].value,
+        },
+        raw: true,
+      });
+
+      list[i].fullLabel = findToDoctionary ? findToDoctionary.label : "";
+    }
+
     return list;
   };
 

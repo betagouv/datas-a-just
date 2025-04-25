@@ -1,8 +1,6 @@
 import { readdirSync, readFileSync, unlinkSync } from "fs";
-import { getPathTmpDatas, getXMLTagName, getXMLTagValue } from "../utils/datas";
-import lineByLine from "n-readlines";
-import { dbInstance } from "./index";
-const { XMLParser, XMLBuilder, XMLValidator } = require("fast-xml-parser");
+import { getPathTmpDatas } from "../utils/datas";
+const { XMLParser } = require("fast-xml-parser");
 
 export default (sequelizeInstance, Model) => {
   Model.syncDatas = async () => {
@@ -20,7 +18,6 @@ export default (sequelizeInstance, Model) => {
 
       for (let y = 0; y < jObj["ROWSET"]["ROW"].length; y++) {
         const row = jObj["ROWSET"]["ROW"][y];
-        console.log("jObj", row);
         const findExist = await Model.findOne({
           where: {
             type: row["TYPE_NOMENC"],
@@ -35,7 +32,7 @@ export default (sequelizeInstance, Model) => {
             type: row["TYPE_NOMENC"],
             juridiction: row["TYPE_JURID"],
             code: row["CODE"],
-            label: row["LIBELLE"],
+            label: row["LIBELLE"].replace(/  /g, " "),
           });
         }
       }

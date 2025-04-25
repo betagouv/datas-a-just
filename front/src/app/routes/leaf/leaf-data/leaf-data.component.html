@@ -10,12 +10,12 @@
                 <option *ngFor="let type of this.datasService.dataTypes()" [value]="type.id">{{type.label}}</option>
             </select> -->
         </span>
-        <div>
-            <p>FILTRE : <input [(ngModel)]="filter.columnFilter" /> (regex pour <a href="https://regex101.com/"
-                    target="_blank">tester</a>)</p>
+        <div class="filter-values">
+            <p>FILTRE : <input [(ngModel)]="filter.columnFilter" /></p>
             <div class="preview-datas">
                 Données existantes : <select>
-                    <option *ngFor="let l of lines" [value]="l.value">{{l.value}} {{isMatch(l.value) ? ' - ✔' : ''}}
+                    <option *ngFor="let l of lines" [value]="l.value">{{l.value}} {{l.fullLabel ? ' - '+l.fullLabel :
+                        ''}} {{isMatch(l.value) ? ' - ✔' : ''}}
                     </option>
                 </select>
             </div>

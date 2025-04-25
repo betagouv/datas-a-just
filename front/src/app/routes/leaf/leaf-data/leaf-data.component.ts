@@ -18,10 +18,9 @@ export class LeafDataComponent implements OnChanges {
   @Input() filter: DataTypeInterface | null = null;
   @Input() isChild = false;
   @Output() onRemove = new EventEmitter();
-  lines: { value: string; count: number }[] = [];
+  lines: { value: string; count: number, fullLabel: string }[] = [];
 
   ngOnChanges() {
-    console.log('filter', this.filter);
     this.onLoad();
   }
 
