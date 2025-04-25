@@ -18,28 +18,7 @@
           "builder": "@ngx-env/builder:application",
           "options": {
             "allowedCommonJsDependencies": [
-              "moment",
-              "file-saver",
-              "lodash",
-              "core-js/modules/es.promise.js",
-              "core-js/modules/es.string.match.js",
-              "core-js/modules/es.string.replace.js",
-              "core-js/modules/es.string.starts-with.js",
-              "core-js/modules/es.array.iterator.js",
-              "core-js/modules/web.dom-collections.iterator.js",
-              "core-js/modules/es.array.reduce.js",
-              "core-js/modules/es.string.ends-with.js",
-              "core-js/modules/es.string.split.js",
-              "raf",
-              "core-js/modules/es.string.trim.js",
-              "rgbcolor",
-              "core-js/modules/es.array.index-of.js",
-              "core-js/modules/es.string.includes.js",
-              "core-js/modules/es.array.reverse.js",
-              "core-js/modules/es.regexp.to-string.js",
-              "html2canvas",
-              "xlsx-renderer",
-              "dompurify"
+              "dagre", "drawflow", "lodash"
             ],
             "outputPath": "dist",
             "index": "src/index.html",
@@ -51,48 +30,21 @@
             "inlineStyleLanguage": "scss",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              "src/robots.txt"
             ],
             "styles": [
               "@angular/material/prebuilt-themes/azure-blue.css",
-              "node_modules/quill/dist/quill.snow.css",
-              "node_modules/toastr/build/toastr.min.css",
               "src/app/styles/styles.scss",
-              "node_modules/animate.css/animate.min.css",
-              "node_modules/mapbox-gl/dist/mapbox-gl.css",
-              "node_modules/intro.js/minified/introjs.min.css"
+              "node_modules/animate.css/animate.min.css"
             ],
             "scripts": [
-              "node_modules/quill/dist/quill.js",
-              "node_modules/mapbox-gl/dist/mapbox-gl.js",
-              "node_modules/jquery/dist/jquery.min.js",
-              "node_modules/toastr/build/toastr.min.js",
-              "node_modules/intro.js/minified/intro.min.js"
             ]
           },
           "configurations": {
             "production": {
               "index": {
-                "input": "src/index.production.html",
-                "output": "index.html"
-              },
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "6mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "25kb",
-                  "maximumError": "50kb"
-                }
-              ],
-              "outputHashing": "all"
-            },
-            "production-ca": {
-              "index": {
-                "input": "src/index.production-ca.html",
+                "input": "src/index.html",
                 "output": "index.html"
               },
               "budgets": [
@@ -111,26 +63,7 @@
             },
             "staging": {
               "index": {
-                "input": "src/index.staging.html",
-                "output": "index.html"
-              },
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "6mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "25kb",
-                  "maximumError": "50kb"
-                }
-              ],
-              "outputHashing": "all"
-            },
-            "staging-ca": {
-              "index": {
-                "input": "src/index.staging-ca.html",
+                "input": "src/index.html",
                 "output": "index.html"
               },
               "budgets": [
@@ -149,26 +82,7 @@
             },
             "sandbox": {
               "index": {
-                "input": "src/index.sandbox.html",
-                "output": "index.html"
-              },
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "6mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "25kb",
-                  "maximumError": "50kb"
-                }
-              ],
-              "outputHashing": "all"
-            },
-            "sandbox-ca": {
-              "index": {
-                "input": "src/index.sandbox-ca.html",
+                "input": "src/index.html",
                 "output": "index.html"
               },
               "budgets": [
