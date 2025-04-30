@@ -4,9 +4,11 @@ import lineByLine from "n-readlines";
 import { dbInstance } from "./index";
 
 export default (sequelizeInstance, Model) => {
+  Model.cacheColumn = {};
   Model.syncDatas = async () => {
     console.time("SYNC NEW DATAS");
     console.log("SYNC NEW DATAS", getPathTmpDatas());
+    Model.cacheColumn = {};
 
     const files = readdirSync(getPathTmpDatas()).filter(
       (f) => !f.includes("NOMENC") && (f.endsWith(".xml") || f.endsWith(".csv"))
@@ -20,9 +22,21 @@ export default (sequelizeInstance, Model) => {
         let liner = new lineByLine(`${getPathTmpDatas()}/${file}`);
         let line = null;
         let header = null;
+        let getSeparator = null;
         while ((line = liner.next().toString()) !== "false") {
           const lineFormated = line.toString("ascii").trim();
-          const lineSplited = lineFormated.split(",");
+
+          if (getSeparator === null) {
+            const nbVirgule = (lineFormated.match(/,/g) || []).length;
+            const nbDotVirgule = (lineFormated.match(/;/g) || []).length;
+            if (nbVirgule > nbDotVirgule) {
+              getSeparator = ",";
+            } else {
+              getSeparator = ";";
+            }
+          }
+
+          const lineSplited = lineFormated.split(getSeparator);
           if (!header) {
             header = ["file-name", ...lineSplited];
           } else {
@@ -94,6 +108,7 @@ export default (sequelizeInstance, Model) => {
     }
 
     console.timeEnd("SYNC NEW DATAS");
+    Model.cacheColumn = {};
     // tests duration 8:35.003
     // S06_men_20250226-002025_RGC-TGI_f03.xml duration 26:00.000
   };
@@ -105,26 +120,32 @@ export default (sequelizeInstance, Model) => {
       const key = header[i];
       const value = line[i] || null;
 
-      if (key) {
-        const findHeaderExist = await Model.findOne({
-          where: { label: key },
-          raw: true,
-          logging: false,
-        });
-        if (findHeaderExist) {
-          prepareValues[findHeaderExist.column_name] = value;
-        } else {
-          const countHeader = await Model.count({
+      if (Model.cacheColumn[key]) {
+        prepareValues[Model.cacheColumn[key]] = value;
+      } else {
+        if (key) {
+          const findHeaderExist = await Model.findOne({
+            where: { label: key },
+            raw: true,
             logging: false,
           });
-          dbInstance.options.logging = false;
-          const newHeader = await Model.create({
-            type: "string",
-            label: key,
-            column_name: "data_" + (countHeader + 1),
-          });
-          dbInstance.options.logging = true;
-          prepareValues[newHeader.column_name] = value;
+          if (findHeaderExist) {
+            prepareValues[findHeaderExist.column_name] = value;
+            Model.cacheColumn[key] = findHeaderExist.column_name;
+          } else {
+            const countHeader = await Model.count({
+              logging: false,
+            });
+            dbInstance.options.logging = false;
+            const newHeader = await Model.create({
+              type: "string",
+              label: key,
+              column_name: "data_" + (countHeader + 1),
+            });
+            dbInstance.options.logging = true;
+            prepareValues[newHeader.column_name] = value;
+            Model.cacheColumn[key] = newHeader.column_name;
+          }
         }
       }
     }

@@ -70,6 +70,13 @@ export default (sequelizeInstance) => {
       timestamps: true,
       paranoid: true,
       underscored: true,
+      indexes: [
+        {
+          unique: false,
+          name: "datas-index-label",
+          fields: ["label"],
+        },
+      ],
     }
   );
 

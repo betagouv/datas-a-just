@@ -68,6 +68,7 @@ export default (sequelizeInstance, Model) => {
     const files = readdirSync(getPathTmpDatas()).filter((f) =>
       f.endsWith(".yml")
     );
+
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       console.time(file);
@@ -80,6 +81,7 @@ export default (sequelizeInstance, Model) => {
       for (let y = 0; y < datasQueries.length; y++) {
         const row = datasQueries[y];
         const types = Object.keys(row.filtres);
+        const filterByFileName = row.fichier || null;
 
         for (let z = 0; z < types.length; z++) {
           const type = types[z];
@@ -92,6 +94,8 @@ export default (sequelizeInstance, Model) => {
             },
           });
 
+          console.log("filters", filters);
+
           if (!findExist) {
             const leaf = await Model.create({
               name: row.label,
@@ -99,6 +103,17 @@ export default (sequelizeInstance, Model) => {
             });
 
             const typeOfFilters = Object.keys(filters);
+
+            if (filterByFileName) {
+              // add filter by file name
+              await Model.models.leafsqueries.create({
+                leaf_id: leaf.id,
+                column_name: "data_1",
+                column_filter: filterByFileName,
+                include: true,
+                type: "filter",
+              });
+            }
 
             for (let j = 0; j < typeOfFilters.length; j++) {
               const typeOfFilter = typeOfFilters[j];
@@ -114,20 +129,25 @@ export default (sequelizeInstance, Model) => {
                   type: "counted",
                 });
               } else {
-                const getDBColumn = await Model.models.datasindex.findOne({
+                let getDBColumn = await Model.models.datasindex.findOne({
                   where: { label: typeOfFilter },
                   raw: true,
                 });
 
                 if (!getDBColumn) {
-                  throw new Error(
-                    `Column ${typeOfFilter} not found in datasindex`
-                  );
+                  const countHeader = await Model.models.datasindex.count();
+                  getDBColumn = await Model.models.datasindex.create({
+                    type: "string",
+                    label: typeOfFilter,
+                    column_name: "data_" + (countHeader + 1),
+                  });
+                  getDBColumn = getDBColumn.dataValues;
                 }
                 const columnName = getDBColumn.column_name;
                 let firstId = null;
                 for (let z = 0; z < filter.length; z++) {
                   const filterValue = filter[z].replace(/  /g, " ");
+                  console.log("filterValue", filterValue);
                   const findDictionary =
                     await Model.models.dictionaries.findOne({
                       where: {
