@@ -43,9 +43,5 @@ export default (sequelizeInstance, Model) => {
     }
   };
 
-  setTimeout(() => {
-    Model.syncDatas();
-  }, 1000);
-
   return Model;
 };

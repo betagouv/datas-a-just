@@ -28,4 +28,21 @@ export default class RouteDatas extends Route {
     const { columnName } = ctx.params;
     this.sendOk(ctx, await this.model.datasGrouped(columnName));
   }
+
+  @Route.Post({
+    bodyType: Types.object().keys({
+      datas: Types.any(),
+      columns: Types.any(),
+    }),
+  })
+  async uploadDatas(ctx) {
+    const { datas, columns } = this.body(ctx);
+    //console.log("columns", columns);
+    for (let i = 0; i < datas.length; i++) {
+      const data = datas[i];
+      await this.model.syncDataLine(columns, data);
+    }
+
+    this.sendOk(ctx, "Ok");
+  }
 }
