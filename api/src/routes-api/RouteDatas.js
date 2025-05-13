@@ -37,11 +37,7 @@ export default class RouteDatas extends Route {
   })
   async uploadDatas(ctx) {
     const { datas, columns } = this.body(ctx);
-    //console.log("columns", columns);
-    for (let i = 0; i < datas.length; i++) {
-      const data = datas[i];
-      await this.model.syncDataLine(columns, data);
-    }
+    await this.model.syncDataLine(columns, datas);
 
     this.sendOk(ctx, "Ok");
   }

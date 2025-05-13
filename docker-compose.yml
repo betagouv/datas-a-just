@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgres:10.4
+    image: postgres:latest
     restart: always
     cpus: 2.0
     mem_limit: 4G
@@ -22,9 +22,9 @@ services:
       - "-c"
       - "maintenance_work_mem=512MB"
       - "-c"
-      - "checkpoint_completion_target=0.7"
+      - "checkpoint_completion_target=0.9"
       - "-c"
-      - "wal_buffers=16MB"
+      - "wal_buffers=64MB"
       - "-c"
       - "default_statistics_target=100"
       - "-c"
@@ -36,7 +36,7 @@ services:
       - "-c"
       - "min_wal_size=1GB"
       - "-c"
-      - "max_wal_size=4GB"
+      - "max_wal_size=8GB"
       - "-c"
       - "max_worker_processes=4"
       - "-c"

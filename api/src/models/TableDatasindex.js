@@ -1,14 +1,12 @@
 import { dbInstance } from "./index";
 
 export default (sequelizeInstance, Model) => {
-  Model.syncDataLine = async (header, line) => {
-    const prepareValues = {};
-    //console.log("header", header);
-    //console.log("line", line);
+  Model.syncDataLine = async (header, datas) => {
+    const allDatas = [];
+    const cacheColumn = {};
 
     for (let i = 0; i < header.length; i++) {
       const key = header[i];
-      const value = line[i] || null;
 
       if (key) {
         const findHeaderExist = await Model.findOne({
@@ -17,7 +15,7 @@ export default (sequelizeInstance, Model) => {
           logging: false,
         });
         if (findHeaderExist) {
-          prepareValues[findHeaderExist.column_name] = value;
+          cacheColumn[key] = findHeaderExist.column_name;
         } else {
           const countHeader = await Model.count({
             logging: false,
@@ -29,12 +27,30 @@ export default (sequelizeInstance, Model) => {
             column_name: "data_" + (countHeader + 1),
           });
           dbInstance.options.logging = true;
-          prepareValues[newHeader.column_name] = value;
+          cacheColumn[key] = newHeader.column_name;
         }
       }
     }
 
-    await Model.models.datasv1.create(prepareValues);
+    for (let z = 0; z < datas.length; z++) {
+      const prepareValues = {};
+      const line = datas[z];
+      //console.log("header", header);
+      //console.log("line", line);
+
+      for (let i = 0; i < header.length; i++) {
+        const key = header[i];
+        const value = line[i] || null;
+
+        prepareValues[cacheColumn[key]] = value;
+      }
+
+      allDatas.push(prepareValues);
+    }
+
+    await Model.models.datasv1.bulkCreate(allDatas, {
+      logging: false,
+    });
   };
 
   Model.list = async () => {

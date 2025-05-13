@@ -2,13 +2,56 @@ import { getPathTmpDatas, getXMLTagName, getXMLTagValue } from "./utils/datas";
 import lineByLine from "n-readlines";
 import { readdirSync, unlinkSync } from "fs";
 import { pushDatas } from "./utils/axios";
+import { migrationAllOfDatabase } from "./utils/database";
 
-const NB_LINES = 10000;
+const NB_LINES = 100000;
 
 export default class App {
   constructor() {}
 
   async start() {
+    await this.migrateDatas();
+  }
+
+  migrateDatas = async () => {
+    await migrationAllOfDatabase({
+      from: {
+        user: process.env.OLD_SERVER_USER,
+        url: process.env.OLD_SERVER_URL,
+        port: process.env.OLD_SERVER_PORT,
+        db: process.env.OLD_SERVER_DB,
+        password: process.env.OLD_SERVER_PASSWORD,
+      },
+      to: {
+        user: process.env.NEW_SERVER_USER,
+        url: process.env.NEW_SERVER_URL,
+        port: process.env.NEW_SERVER_PORT,
+        db: process.env.NEW_SERVER_DB,
+        password: process.env.NEW_SERVER_PASSWORD,
+      },
+    });
+
+    await this.syncDatas();
+
+    await migrationAllOfDatabase({
+      from: {
+        user: process.env.NEW_SERVER_USER,
+        url: process.env.NEW_SERVER_URL,
+        port: process.env.NEW_SERVER_PORT,
+        db: process.env.NEW_SERVER_DB,
+        password: process.env.NEW_SERVER_PASSWORD,
+      },
+      to: {
+        user: process.env.OLD_SERVER_USER,
+        url: process.env.OLD_SERVER_URL,
+        port: process.env.OLD_SERVER_PORT,
+        db: process.env.OLD_SERVER_DB,
+        password: process.env.OLD_SERVER_PASSWORD,
+      },
+    });
+  };
+
+  syncDatas = async () => {
     console.time("SYNC NEW DATAS");
     console.log("SYNC NEW DATAS", getPathTmpDatas());
 
@@ -104,12 +147,12 @@ export default class App {
         }
       }
 
-      this.syncDataLine(null, null);
+      await this.syncDataLine(null, null);
       // remove file
       unlinkSync(`${getPathTmpDatas()}/${file}`);
       console.timeEnd(file);
     }
-  }
+  };
 
   cacheColumn = {};
   datasLine = [];
