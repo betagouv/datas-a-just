@@ -50,4 +50,10 @@ export class TreeService {
     formData.append('file', file);
     return this.serverService.put(`leafs/upload-file`, formData);
   }
+
+  uploadDictionary(file: File) {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.serverService.put(`datas/upload-dictionary`, formData);
+  }
 }

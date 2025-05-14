@@ -53,4 +53,10 @@ export default class RouteDatas extends Route {
 
     this.sendOk(ctx, "Ok");
   }
+
+  @Route.Put()
+  async uploadDictionary(ctx) {
+    const { file } = ctx.request.files;
+    this.sendOk(ctx, await this.models.dictionaries.syncDictionary(file));
+  }
 }

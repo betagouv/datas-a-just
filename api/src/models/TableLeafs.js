@@ -64,16 +64,13 @@ export default (sequelizeInstance, Model) => {
   };
 
   Model.syncDatas = async (file) => {
-    console.time(file);
-    console.log("file name", file);
-
     const readedFile = readFileSync(file.filepath, "utf8");
     const yamlParse = parse(readedFile);
 
     const datasQueries = Object.values(yamlParse["categories"]);
     for (let y = 0; y < datasQueries.length; y++) {
       const row = datasQueries[y];
-      const types = Object.keys(row.filtres);
+      const types = Object.keys(row.filtres || {});
       const filterByFileName = row.fichier || null;
 
       for (let z = 0; z < types.length; z++) {
@@ -143,7 +140,7 @@ export default (sequelizeInstance, Model) => {
             const columnName = getDBColumn.column_name;
             let firstId = null;
             for (let z = 0; z < filter.length; z++) {
-              const filterValue = filter[z].replace(/  /g, " ");
+              const filterValue = (filter[z] + "").replace(/  /g, " ");
               console.log("filterValue", filterValue);
               const findDictionary = await Model.models.dictionaries.findOne({
                 where: {

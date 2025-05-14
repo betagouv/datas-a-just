@@ -4,6 +4,7 @@ import { LeafInterface } from '../../interfaces/leaf.interfaces';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { chooseFile } from '../../utils/file';
+import { AppService } from '../../services/app/app.service';
 
 /**
  * Page de qui sommes nous
@@ -17,6 +18,7 @@ import { chooseFile } from '../../utils/file';
 })
 export class LeafsPage {
   treeService = inject(TreeService);
+  appService = inject(AppService);
   leafs: LeafInterface[] = [];
 
   ngOnInit() {
@@ -36,10 +38,21 @@ export class LeafsPage {
   }
 
   async chooseLeafImport() {
-    const file = await chooseFile(".yml")
+    const file = await chooseFile('.yml');
     if (file) {
+      this.appService.appLoading.set(true);
       await this.treeService.uploadFile(file);
       this.onLoad();
+      this.appService.appLoading.set(false);
+    }
+  }
+
+  async chooseDictionaryImport() {
+    const file = await chooseFile('.xml');
+    if (file) {
+      this.appService.appLoading.set(true);
+      await this.treeService.uploadDictionary(file);
+      this.appService.appLoading.set(false);
     }
   }
 }
