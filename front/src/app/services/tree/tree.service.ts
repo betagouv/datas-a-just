@@ -44,4 +44,10 @@ export class TreeService {
   saveBranch(branch: BranchInterface) {
     return this.serverService.put(`branchs/save`, branch);
   }
+
+  uploadFile(file: File) {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.serverService.put(`leafs/upload-file`, formData);
+  }
 }

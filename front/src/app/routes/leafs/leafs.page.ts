@@ -3,6 +3,7 @@ import { TreeService } from '../../services/tree/tree.service';
 import { LeafInterface } from '../../interfaces/leaf.interfaces';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { chooseFile } from '../../utils/file';
 
 /**
  * Page de qui sommes nous
@@ -32,5 +33,13 @@ export class LeafsPage {
     this.treeService.addLeaf().then(() => {
       this.onLoad();
     });
+  }
+
+  async chooseLeafImport() {
+    const file = await chooseFile(".yml")
+    if (file) {
+      await this.treeService.uploadFile(file);
+      this.onLoad();
+    }
   }
 }

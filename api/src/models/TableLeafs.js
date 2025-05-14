@@ -1,11 +1,10 @@
 import { parse } from "yaml";
-import { readdirSync, readFileSync, unlinkSync } from "fs";
-import { getPathTmpDatas } from "../utils/datas";
+import { readFileSync } from "fs";
 
 export default (sequelizeInstance, Model) => {
   Model.list = async () => {
     const list = await Model.findAll({
-      attributes: ["id", "name", ["alias_name", "aliasName"]],
+      attributes: ["id", "name", ["alias_name", "aliasName"], "version"],
     });
 
     return list;
@@ -64,124 +63,112 @@ export default (sequelizeInstance, Model) => {
     );
   };
 
-  Model.syncDatas = async () => {
-    const files = readdirSync(getPathTmpDatas()).filter((f) =>
-      f.endsWith(".yml")
-    );
+  Model.syncDatas = async (file) => {
+    console.time(file);
+    console.log("file name", file);
 
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      console.time(file);
-      console.log("file name", file);
+    const readedFile = readFileSync(file.filepath, "utf8");
+    const yamlParse = parse(readedFile);
 
-      const readedFile = readFileSync(`${getPathTmpDatas()}/${file}`, "utf8");
-      const yamlParse = parse(readedFile);
+    const datasQueries = Object.values(yamlParse["categories"]);
+    for (let y = 0; y < datasQueries.length; y++) {
+      const row = datasQueries[y];
+      const types = Object.keys(row.filtres);
+      const filterByFileName = row.fichier || null;
 
-      const datasQueries = Object.values(yamlParse["categories"]);
-      for (let y = 0; y < datasQueries.length; y++) {
-        const row = datasQueries[y];
-        const types = Object.keys(row.filtres);
-        const filterByFileName = row.fichier || null;
+      for (let z = 0; z < types.length; z++) {
+        const type = types[z];
+        const filters = row.filtres[type];
 
-        for (let z = 0; z < types.length; z++) {
-          const type = types[z];
-          const filters = row.filtres[type];
+        const findExist = await Model.findOne({
+          where: {
+            name: row.label,
+            alias_name: type,
+          },
+        });
+        let version = 0;
+        if (findExist) {
+          version = findExist.version + 1;
+        }
 
-          const findExist = await Model.findOne({
-            where: {
-              name: row.label,
-              alias_name: type,
-            },
+        console.log("filters", filters);
+
+        const leaf = await Model.create({
+          name: row.label,
+          alias_name: type,
+          version,
+        });
+
+        const typeOfFilters = Object.keys(filters);
+
+        if (filterByFileName) {
+          // add filter by file name
+          await Model.models.leafsqueries.create({
+            leaf_id: leaf.id,
+            column_name: "data_1",
+            column_filter: filterByFileName,
+            include: true,
+            type: "filter",
           });
+        }
 
-          console.log("filters", filters);
+        for (let j = 0; j < typeOfFilters.length; j++) {
+          const typeOfFilter = typeOfFilters[j];
+          let filter = filters[typeOfFilter];
+          if (!Array.isArray(filter)) {
+            filter = [filter];
+          }
 
-          if (!findExist) {
-            const leaf = await Model.create({
-              name: row.label,
-              alias_name: type,
+          if (typeOfFilter === "TOTAL") {
+            await Model.models.leafsqueries.create({
+              leaf_id: leaf.id,
+              column_name: filter[0],
+              type: "counted",
+            });
+          } else {
+            let getDBColumn = await Model.models.datasindex.findOne({
+              where: { label: typeOfFilter },
+              raw: true,
             });
 
-            const typeOfFilters = Object.keys(filters);
-
-            if (filterByFileName) {
-              // add filter by file name
-              await Model.models.leafsqueries.create({
-                leaf_id: leaf.id,
-                column_name: "data_1",
-                column_filter: filterByFileName,
-                include: true,
-                type: "filter",
+            if (!getDBColumn) {
+              const countHeader = await Model.models.datasindex.count();
+              getDBColumn = await Model.models.datasindex.create({
+                type: "string",
+                label: typeOfFilter,
+                column_name: "data_" + (countHeader + 1),
               });
+              getDBColumn = getDBColumn.dataValues;
             }
+            const columnName = getDBColumn.column_name;
+            let firstId = null;
+            for (let z = 0; z < filter.length; z++) {
+              const filterValue = filter[z].replace(/  /g, " ");
+              console.log("filterValue", filterValue);
+              const findDictionary = await Model.models.dictionaries.findOne({
+                where: {
+                  label: filterValue.replace("<>", "").replace(/"/g, "").trim(),
+                },
+                raw: true,
+              });
 
-            for (let j = 0; j < typeOfFilters.length; j++) {
-              const typeOfFilter = typeOfFilters[j];
-              let filter = filters[typeOfFilter];
-              if (!Array.isArray(filter)) {
-                filter = [filter];
-              }
-
-              if (typeOfFilter === "TOTAL") {
-                await Model.models.leafsqueries.create({
-                  leaf_id: leaf.id,
-                  column_name: filter[0],
-                  type: "counted",
-                });
-              } else {
-                let getDBColumn = await Model.models.datasindex.findOne({
-                  where: { label: typeOfFilter },
-                  raw: true,
-                });
-
-                if (!getDBColumn) {
-                  const countHeader = await Model.models.datasindex.count();
-                  getDBColumn = await Model.models.datasindex.create({
-                    type: "string",
-                    label: typeOfFilter,
-                    column_name: "data_" + (countHeader + 1),
-                  });
-                  getDBColumn = getDBColumn.dataValues;
-                }
-                const columnName = getDBColumn.column_name;
-                let firstId = null;
-                for (let z = 0; z < filter.length; z++) {
-                  const filterValue = filter[z].replace(/  /g, " ");
-                  console.log("filterValue", filterValue);
-                  const findDictionary =
-                    await Model.models.dictionaries.findOne({
-                      where: {
-                        label: filterValue
-                          .replace("<>", "")
-                          .replace(/"/g, "")
-                          .trim(),
-                      },
-                      raw: true,
-                    });
-
-                  const newQuery = await Model.models.leafsqueries.create({
-                    leaf_id: leaf.id,
-                    column_name: columnName,
-                    column_filter: findDictionary
-                      ? findDictionary.code
-                      : filterValue.replace("<>", "").replace(/"/g, "").trim(),
-                    include: filterValue.includes("<>") ? false : true,
-                    type: "filter",
-                    parent_leaf_query_id: firstId,
-                  });
-                  if (!firstId) {
-                    firstId = newQuery.id;
-                  }
-                }
+              const newQuery = await Model.models.leafsqueries.create({
+                leaf_id: leaf.id,
+                column_name: columnName,
+                column_filter: findDictionary
+                  ? findDictionary.code
+                  : filterValue.replace("<>", "").replace(/"/g, "").trim(),
+                include: filterValue.includes("<>") ? false : true,
+                type: "filter",
+                parent_leaf_query_id: firstId,
+              });
+              if (!firstId) {
+                firstId = newQuery.id;
               }
             }
           }
         }
       }
-
-      // remove file
-      unlinkSync(`${getPathTmpDatas()}/${file}`);
-      console.timeEnd(file);
     }
   };
 

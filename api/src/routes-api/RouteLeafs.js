@@ -75,4 +75,10 @@ export default class RouteLeafs extends Route {
       await this.model.previewDatas({ datasFilters, datasCounted })
     );
   }
+
+  @Route.Put()
+  async uploadFile(ctx) {
+    const { file } = ctx.request.files;
+    this.sendOk(ctx, await this.model.syncDatas(file));
+  }
 }
