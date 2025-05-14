@@ -14,7 +14,7 @@ export default class App {
   }
 
   migrateDatas = async () => {
-    /*await migrationAllOfDatabase({
+    await migrationAllOfDatabase({
       from: {
         user: process.env.OLD_SERVER_USER,
         url: process.env.OLD_SERVER_URL,
@@ -29,11 +29,11 @@ export default class App {
         db: process.env.NEW_SERVER_DB,
         password: process.env.NEW_SERVER_PASSWORD,
       },
-    });*/
+    });
 
     await this.syncDatas();
 
-    /*await migrationAllOfDatabase({
+    await migrationAllOfDatabase({
       from: {
         user: process.env.NEW_SERVER_USER,
         url: process.env.NEW_SERVER_URL,
@@ -48,7 +48,7 @@ export default class App {
         db: process.env.OLD_SERVER_DB,
         password: process.env.OLD_SERVER_PASSWORD,
       },
-    });*/
+    });
   };
 
   syncDatas = async () => {
