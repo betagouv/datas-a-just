@@ -85,5 +85,22 @@ export default (sequelizeInstance, Model) => {
     return list;
   };
 
+  Model.cleanDatas = async (fileName) => {
+    const findHeaderExist = await Model.findOne({
+      where: { label: "file-name" },
+      raw: true,
+      logging: false,
+    });
+
+    if (findHeaderExist) {
+      await Model.models.datasv1.destroy({
+        where: {
+          [findHeaderExist.column_name]: fileName,
+        },
+        force: true,
+      });
+    }
+  };
+
   return Model;
 };

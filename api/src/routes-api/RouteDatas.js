@@ -41,4 +41,16 @@ export default class RouteDatas extends Route {
 
     this.sendOk(ctx, "Ok");
   }
+
+  @Route.Post({
+    bodyType: Types.object().keys({
+      fileName: Types.string(),
+    }),
+  })
+  async cleanDatas(ctx) {
+    const { fileName } = this.body(ctx);
+    await this.model.cleanDatas(fileName);
+
+    this.sendOk(ctx, "Ok");
+  }
 }

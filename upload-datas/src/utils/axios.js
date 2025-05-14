@@ -7,3 +7,9 @@ export const pushDatas = async (columns, datas) => {
     columns,
   });
 };
+
+export const cleanDatas = async (fileName) => {
+  return axios.post(`${config.serverUrl}/datas/clean-datas`, {
+    fileName,
+  });
+};

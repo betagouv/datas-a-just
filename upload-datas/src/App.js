@@ -1,7 +1,7 @@
 import { getPathTmpDatas, getXMLTagName, getXMLTagValue } from "./utils/datas";
 import lineByLine from "n-readlines";
 import { readdirSync, unlinkSync } from "fs";
-import { pushDatas } from "./utils/axios";
+import { cleanDatas, pushDatas } from "./utils/axios";
 import { migrationAllOfDatabase } from "./utils/database";
 
 const NB_LINES = 100000;
@@ -14,7 +14,7 @@ export default class App {
   }
 
   migrateDatas = async () => {
-    await migrationAllOfDatabase({
+    /*await migrationAllOfDatabase({
       from: {
         user: process.env.OLD_SERVER_USER,
         url: process.env.OLD_SERVER_URL,
@@ -29,11 +29,11 @@ export default class App {
         db: process.env.NEW_SERVER_DB,
         password: process.env.NEW_SERVER_PASSWORD,
       },
-    });
+    });*/
 
     await this.syncDatas();
 
-    await migrationAllOfDatabase({
+    /*await migrationAllOfDatabase({
       from: {
         user: process.env.NEW_SERVER_USER,
         url: process.env.NEW_SERVER_URL,
@@ -48,7 +48,7 @@ export default class App {
         db: process.env.OLD_SERVER_DB,
         password: process.env.OLD_SERVER_PASSWORD,
       },
-    });
+    });*/
   };
 
   syncDatas = async () => {
@@ -62,6 +62,9 @@ export default class App {
       const file = files[i];
       console.time(file);
       console.log("file name", file);
+
+      await cleanDatas(file);
+      throw "stop";
 
       if (file.endsWith(".csv")) {
         let liner = new lineByLine(`${getPathTmpDatas()}/${file}`);
