@@ -64,7 +64,6 @@ export default class App {
       console.log("file name", file);
 
       await cleanDatas(file);
-      throw "stop";
 
       if (file.endsWith(".csv")) {
         let liner = new lineByLine(`${getPathTmpDatas()}/${file}`);
